@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CBT Online - Login Peserta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
         * {
             margin: 0;
@@ -181,10 +182,19 @@
 
     <!-- Kolom Kanan -->
     <div class="right-side">
-        <form action="dashboard.html" method="post">
+        <form action="<?= base_url() ?>/login" method="post">
             <h2>Login Peserta</h2>
             <p>Silakan masuk dengan username dan Password Anda</p>
-
+            <?php if (session()->getFlashdata('error')) : ?>
+                <div class="alert alert-danger" role="alert">
+                    <?= esc(session()->getFlashdata('error')) ?>
+                </div>
+            <?php endif; ?>
+            <?php if (session()->getFlashdata('success')) : ?>
+                <div class="alert alert-success" role="alert">
+                    <?= esc(session()->getFlashdata('success')) ?>
+                </div>
+            <?php endif; ?>
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Masukkan username" required>

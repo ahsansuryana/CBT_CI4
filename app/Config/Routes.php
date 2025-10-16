@@ -34,9 +34,13 @@ $routes->setAutoRoute(true);
 // $routes->get('/', 'Home::index');
 $routes->get('/', 'Auth::index');
 $routes->get('/register', 'Register::index');
+$routes->post('/register', 'Auth::register');
 $routes->get('/layout', 'Layout::index');
+$routes->post('/login', 'Auth::login');
+$routes->get('/logout', 'Auth::logout');
 
-
+$routes->get('/api/check-username', 'Auth::checkUsername');
+$routes->get('/api/check-email', 'Auth::checkEmail');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
