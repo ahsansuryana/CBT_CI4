@@ -12,17 +12,7 @@ class Auth extends BaseController
     {
         if (session()->get('isLoggedIn')) {
             // Redirect berdasarkan role jika sudah login
-            switch (session()->get('role_id')) {
-                case 1: // Admin
-                    return redirect()->to('/admin/dashboard');
-                case 2: // Guru
-                    return redirect()->to('/guru/dashboard');
-                case 3: // Santri
-                    return redirect()->to('/santri/dashboard');
-                default:
-                    session()->destroy();
-                    return redirect()->to('/')->with('error', 'Role tidak dikenali.');
-            }
+            return redirect()->to('/dashboard');
         }
         return view('login');
     }
@@ -62,16 +52,7 @@ class Auth extends BaseController
         session()->set($sessionData);
 
         // Redirect berdasarkan role
-        switch ($user['role_id']) {
-            case 1: // Admin
-                return redirect()->to('/admin/dashboard');
-            case 2: // Guru
-                return redirect()->to('/guru/dashboard');
-            case 3: // Santri
-                return redirect()->to('/santri/dashboard');
-            default:
-                return redirect()->back()->with('error', 'Role tidak dikenali.');
-        }
+        return redirect()->to('/dashboard');
     }
     public function register()
     {

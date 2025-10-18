@@ -41,6 +41,8 @@ $routes->get('/logout', 'Auth::logout');
 
 $routes->get('/api/check-username', 'Auth::checkUsername');
 $routes->get('/api/check-email', 'Auth::checkEmail');
+
+$routes->get('/dashboard', 'Dashboard::index', ['filter' => 'auth']);
 /*
  * --------------------------------------------------------------------
  * Additional Routing
