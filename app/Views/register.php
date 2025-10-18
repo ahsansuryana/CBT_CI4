@@ -205,7 +205,7 @@
 
             // Cek ke server
             try {
-                const res = await fetch(`/api/check-username?username=${value}`);
+                const res = await fetch(`<?= base_url() ?>/api/check-username?username=${value}`);
                 const data = await res.json();
                 if (!data.available) showError('username', 'Username sudah terdaftar. Silakan pilih username lain.');
                 else clearError('username');
@@ -221,7 +221,7 @@
 
             // Cek ke server
             try {
-                const res = await fetch(`/api/check-email?email=${encodeURIComponent(value)}`);
+                const res = await fetch(`<?= base_url() ?>/api/check-email?email=${encodeURIComponent(value)}`);
                 const data = await res.json();
                 if (!data.available) {
                     showError('email', 'Email sudah terdaftar. Silakan gunakan email lain.');

@@ -21,7 +21,7 @@ class Auth extends BaseController
                     return redirect()->to('/santri/dashboard');
                 default:
                     session()->destroy();
-                    return redirect()->to('/login')->with('error', 'Role tidak dikenali.');
+                    return redirect()->to('/')->with('error', 'Role tidak dikenali.');
             }
         }
         return view('login');
@@ -56,6 +56,7 @@ class Auth extends BaseController
             'user_id'   => $user['id'],
             'username'  => $user['username'],
             'role_id'   => $user['role_id'],
+            'name' => $user['name'],
             'isLoggedIn' => true,
         ];
         session()->set($sessionData);
@@ -164,6 +165,7 @@ class Auth extends BaseController
     }
     public function checkUsername()
     {
+        // return ("hello");
         $username = $this->request->getGet('username');
         $userModel = new User();
         $user = $userModel->where('username', $username)->first();
