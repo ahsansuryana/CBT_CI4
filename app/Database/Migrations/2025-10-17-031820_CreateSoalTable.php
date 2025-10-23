@@ -19,7 +19,7 @@ class CreateSoalTable extends Migration
                 'type'       => 'INT',
                 'constraint' => 11,
                 'unsigned'       => true,
-                'null'       => false,
+                'null'       => true,
             ],
             'bank_soal_id' => [
                 'type'       => 'INT',
