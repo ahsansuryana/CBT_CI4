@@ -30,6 +30,13 @@ class Auth implements FilterInterface
             // Jika belum login, redirect ke halaman login
             return redirect()->to('/');
         }
+        if (isset($arguments[0]) && $arguments[0] === 'admin') {
+            // Cek apakah user adalah admin
+            if (session()->get('role_id') !== '1') {
+                // Jika bukan admin, redirect ke halaman dashboard
+                return redirect()->to('/dashboard');
+            }
+        }
     }
 
     /**

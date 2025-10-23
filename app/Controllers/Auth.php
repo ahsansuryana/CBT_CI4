@@ -17,7 +17,55 @@ class Auth extends BaseController
         return view('login');
     }
 
+    public function adminLogin()
+    {
+        if (session()->get('isLoggedIn')) {
+            // Redirect berdasarkan role jika sudah login
+            return redirect()->to('/dashboard');
+        }
+        return view('login_admin');
+    }
+    public function adminLoginPost()
+    {
+        // Tangkap data dari form
+        $username = $this->request->getPost('username');
+        $password = $this->request->getPost('password');
 
+        // Validasi input
+        if (empty($username) || empty($password)) {
+            return redirect()->back()->with('error', 'Username dan Password harus diisi.');
+        }
+        // Cek user di database
+        $userModel = new User();
+        $user = $userModel->where('username', $username)->first();
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'Username tidak ditemukan.');
+        }
+
+        // Verifikasi password
+        if (!password_verify($password, $user['password'])) {
+            return redirect()->back()->with('error', 'Password salah.');
+        }
+
+        //verivikasi role admin
+        if ($user['role_id'] != 1) {
+            return redirect()->back()->with('error', 'Akses ditolak. Hanya admin yang dapat login di sini.');
+        }
+
+        // Set session
+        $sessionData = [
+            'user_id'   => $user['id'],
+            'username'  => $user['username'],
+            'role_id'   => $user['role_id'],
+            'name' => $user['name'],
+            'isLoggedIn' => true,
+        ];
+        session()->set($sessionData);
+
+        // Redirect berdasarkan role
+        return redirect()->to('/dashboard');
+    }
     public function login()
     {
         // Tangkap data dari form

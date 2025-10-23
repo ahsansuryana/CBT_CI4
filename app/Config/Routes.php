@@ -38,11 +38,20 @@ $routes->post('/register', 'Auth::register');
 $routes->get('/layout', 'Layout::index');
 $routes->post('/login', 'Auth::login');
 $routes->get('/logout', 'Auth::logout');
+$routes->post('/admin/login', 'Auth::adminLoginPost');
+$routes->get('/admin/login', 'Auth::adminLogin');
 
 $routes->get('/api/check-username', 'Auth::checkUsername');
 $routes->get('/api/check-email', 'Auth::checkEmail');
 
 $routes->get('/dashboard', 'Dashboard::index', ['filter' => 'auth']);
+$routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
+    $routes->get('dashboard/banksoal', 'Banksoal::index');
+    $routes->get('dashboard/banksoal/(:num)', 'Banksoal::edit/$1');
+    $routes->post('dashboard/banksoal/(:num)', 'Banksoal::update/$1');
+    $routes->get('banksoal', 'Banksoal::getBankSoal');
+});
+$routes->get('/bank-soal', 'Banksoal::index', ['filter' => 'auth']);
 /*
  * --------------------------------------------------------------------
  * Additional Routing

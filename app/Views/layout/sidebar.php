@@ -36,6 +36,16 @@ $menu = [
     ],
 ];
 
+$admin_menu = [
+    [
+        'title' => 'Bank Soal',
+        'icon'  => 'bi bi-folder-fill',
+        'submenu' => [
+            ['title' => 'Daftar Soal', 'url' => '/admin/dashboard/banksoal'],
+        ]
+    ],
+];
+
 function renderSidebar(array $menus)
 {
     $html = '';
@@ -52,7 +62,12 @@ function renderSidebar(array $menus)
         $isActive = !empty($menu['active']);
         $icon = $menu['icon'] ?? 'bi bi-circle';
         $title = $menu['title'] ?? '';
-        $url = $menu['url'] ?? '#';
+        if (isset($menu['url'])) {
+            $url =  $menu['url'];
+            $url = base_url($url);
+        } else {
+            $url = '#';
+        }
 
         $html .= '<li class="nav-item ' . ($isActive ? 'menu-open' : '') . '">';
         $html .= '<a href="' . esc($url) . '" class="nav-link ' . ($isActive ? 'active' : '') . '">';
@@ -85,7 +100,7 @@ function renderSidebar(array $menus)
             data-lte-toggle="treeview"
             role="navigation"
             data-accordion="false">
-            <?= renderSidebar($menu) ?>
+            <?= session()->get('role_id') == 1 ? renderSidebar($admin_menu) :  renderSidebar($menu) ?>
         </ul>
     </nav>
 </div>
