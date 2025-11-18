@@ -2,13 +2,13 @@
 $menu = [
     [
         'title' => 'Dashboard',
-        'icon'  => 'bi bi-speedometer',
-        'active' => true,
-        'submenu' => [
-            ['title' => 'Dashboard v1', 'url' => '/dashboard/v1', 'active' => true],
-            ['title' => 'Dashboard v2', 'url' => '/dashboard/v2'],
-            ['title' => 'Dashboard v3', 'url' => '/dashboard/v3'],
-        ]
+        'icon'  => 'fa-solid fa-table',
+        'url'   => '/dashboard'
+    ],
+    [
+        'title' => 'Ujian',
+        'icon'  => 'bi bi-clipboard-fill',
+        'url'   => '/dashboard/ujian'
     ],
     [
         'title' => 'Theme Generate',
@@ -44,6 +44,13 @@ $admin_menu = [
             ['title' => 'Daftar Soal', 'url' => '/admin/dashboard/banksoal'],
         ]
     ],
+    [
+        'title' => 'Ujian',
+        'icon'  => 'bi bi-folder-fill',
+        'submenu' => [
+            ['title' => 'Daftar Ujian', 'url' => '/admin/dashboard/ujian'],
+        ]
+    ],
 ];
 
 function renderSidebar(array $menus)
@@ -59,12 +66,15 @@ function renderSidebar(array $menus)
 
         // --- Item biasa / submenu ---
         $hasSub = isset($menu['submenu']);
-        $isActive = !empty($menu['active']);
+        $isActive = isset($menu["url"]) && current_url() == base_url($menu["url"]);
         $icon = $menu['icon'] ?? 'bi bi-circle';
         $title = $menu['title'] ?? '';
         if (isset($menu['url'])) {
             $url =  $menu['url'];
             $url = base_url($url);
+            if (base_url() . $url == current_url()) {
+                $isActive = true;
+            }
         } else {
             $url = '#';
         }

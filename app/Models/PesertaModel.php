@@ -4,17 +4,26 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class BanksoalModel extends Model
+class PesertaModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'm_banksoal';
-    protected $primaryKey       = 'id';
+    protected $table            = 'm_peserta';
+    protected $primaryKey       = 'id_peserta';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['bank_id', 'nama_bank', 'mapel_id', 'deskripsi', 'created_at', 'updated_at'];
+    protected $allowedFields    = [
+        "id_peserta",
+        "user_id",
+        "nama_peserta",
+        "jk_peserta",
+        "telp_peserta",
+        "email_peserta",
+        "alamat_peserta",
+        "password"
+    ];
 
     // Dates
     protected $useTimestamps = false;
@@ -39,16 +48,4 @@ class BanksoalModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-    public $joinedWithSoal = false;
-
-    public function joinWithSoal()
-    {
-        // pastikan join tidak ganda kalau dipanggil berkali-kali
-        if (!$this->joinedWithSoal) {
-            $this->join('m_soal', 'm_soal.bank_soal_id = m_banksoal.bank_id', 'left');
-            $this->groupBy('m_banksoal.bank_id');
-            $this->joinedWithSoal = true;
-        }
-        return $this;
-    }
 }

@@ -30,6 +30,12 @@ class CreateUjianTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => '100',
             ],
+            'banksoal_id' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'       => true,
+                'null'       => true,
+            ],
             'tanggal_mulai' => [
                 'type' => 'DATETIME',
                 'null' => true,
@@ -76,6 +82,7 @@ class CreateUjianTable extends Migration
 
         $this->forge->addKey('id_ujian', true);
         $this->forge->addForeignKey('mapel_id', 'm_mapel', 'id_mapel', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('banksoal_id', 'm_banksoal', 'bank_id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('m_ujian');
     }
 

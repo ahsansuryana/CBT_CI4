@@ -17,7 +17,7 @@ class Banksoal extends BaseController
     public function getBankSoal()
     {
         $banksoalModel = new BanksoalModel();
-        $builder = $banksoalModel->select('m_banksoal.bank_id, m_banksoal.nama_bank AS nama_bank, m_banksoal.deskripsi, m_mapel.nama_mapel')
+        $builder = $banksoalModel->select('m_banksoal.bank_id, m_banksoal.nama_bank AS nama_bank, m_banksoal.deskripsi, m_mapel.nama_mapel, COUNT(m_soal.id_soal) AS jumlah_soal')->joinWithSoal()
             ->join('m_mapel', 'm_banksoal.mapel_id = m_mapel.id_mapel', 'left');
         return DataTable::of($builder)
             ->addNumbering('no')
@@ -26,6 +26,12 @@ class Banksoal extends BaseController
                 return '<button type="button" class="btn btn-primary btn-sm" onclick="window.location.href=\'' . base_url("admin/dashboard/banksoal/" . $row->bank_id) . '\'"><i class="fas fa-edit"></i> Edit</button>';
             }, 'last')
             ->toJson(true);
+    }
+    public function get()
+    {
+        $banksoalModel = new BanksoalModel();
+        $data = $banksoalModel->findAll();
+        return $this->response->setJSON($data);
     }
     public function edit($id)
     {
