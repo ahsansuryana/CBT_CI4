@@ -50,6 +50,19 @@ $routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
     $routes->get('dashboard/banksoal/(:num)', 'Banksoal::edit/$1');
     $routes->post('dashboard/banksoal/(:num)', 'Banksoal::update/$1');
     $routes->get('banksoal', 'Banksoal::getBankSoal');
+    $routes->get('getbanksoal', 'Banksoal::get');
+    $routes->get('dashboard/ujian', 'Ujian::index');
+    $routes->get('ujian', 'Ujian::getUjian');
+    $routes->get('cek-kode', 'Ujian::cek_kode');
+    $routes->get('dashboard/ujian/(:segment)', 'Ujian::edit/$1');
+    $routes->post('dashboard/ujian/(:segment)', 'Ujian::update/$1');
+    $routes->get('mapel', 'Mapel::getMapel');
+});
+$routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
+    $routes->get('ujian', 'Ujian::user_index');
+    $routes->get('ujian_active', 'Ujian::ujian_active');
+    $routes->post('ujian/register', 'SantriUjian::register_code');
+    $routes->post('save-subscription', 'NotifController::register');
 });
 $routes->get('/bank-soal', 'Banksoal::index', ['filter' => 'auth']);
 /*

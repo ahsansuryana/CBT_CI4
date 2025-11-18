@@ -1,27 +1,6 @@
 <?= $this->extend('layout/dashboard_template.php') ?>
 <?= $this->section('content') ?>
 <main class="app-main">
-    <!--begin::App Content Header-->
-    <div class="app-content-header">
-        <!--begin::Container-->
-        <div class="container-fluid">
-            <!--begin::Row-->
-            <div class="row">
-                <div class="col-sm-6">
-                    <h3 class="mb-0">Dashboard</h3>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-end">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                    </ol>
-                </div>
-            </div>
-            <!--end::Row-->
-        </div>
-        <!--end::Container-->
-    </div>
-    <!--end::App Content Header-->
     <!--begin::App Content-->
     <div class="app-content">
         <!--begin::Container-->
@@ -33,9 +12,10 @@
                     <!--begin::Small Box Widget 1-->
                     <div class="small-box text-bg-primary">
                         <div class="inner">
-                            <h3>150</h3>
-                            <p>New Orders</p>
+                            <h3>10</h3>
+                            <p>Ujian aktif</p>
                         </div>
+
                         <svg
                             class="small-box-icon"
                             fill="currentColor"
@@ -43,7 +23,7 @@
                             xmlns="http://www.w3.org/2000/svg"
                             aria-hidden="true">
                             <path
-                                d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"></path>
+                                d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z"></path>
                         </svg>
                         <a
                             href="#"
@@ -68,7 +48,7 @@
                             xmlns="http://www.w3.org/2000/svg"
                             aria-hidden="true">
                             <path
-                                d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z"></path>
+                                d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"></path>
                         </svg>
                         <a
                             href="#"
@@ -137,286 +117,97 @@
                 <!--end::Col-->
             </div>
             <!--end::Row-->
-            <!--begin::Row-->
             <div class="row">
-                <!-- Start col -->
-                <div class="col-lg-7 connectedSortable">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h3 class="card-title">Sales Value</h3>
-                        </div>
-                        <div class="card-body">
-                            <div id="revenue-chart"></div>
-                        </div>
-                    </div>
-                    <!-- /.card -->
-                    <!-- DIRECT CHAT -->
-                    <div class="card direct-chat direct-chat-primary mb-4">
-                        <div class="card-header">
-                            <h3 class="card-title">Direct Chat</h3>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">Ujian</h3>
                             <div class="card-tools">
-                                <span title="3 New Messages" class="badge text-bg-primary"> 3 </span>
-                                <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                                    <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                    <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="btn btn-tool"
-                                    title="Contacts"
-                                    data-lte-toggle="chat-pane">
-                                    <i class="bi bi-chat-text-fill"></i>
-                                </button>
                                 <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
                                     <i class="bi bi-x-lg"></i>
                                 </button>
                             </div>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
-                            <!-- Conversations are loaded here -->
-                            <div class="direct-chat-messages">
-                                <!-- Message. Default to the start -->
-                                <div class="direct-chat-msg">
-                                    <div class="direct-chat-infos clearfix">
-                                        <span class="direct-chat-name float-start"> Alexander Pierce </span>
-                                        <span class="direct-chat-timestamp float-end"> 23 Jan 2:00 pm </span>
-                                    </div>
-                                    <!-- /.direct-chat-infos -->
-                                    <img
-                                        class="direct-chat-img"
-                                        src="./assets/img/user1-128x128.jpg"
-                                        alt="message user image" />
-                                    <!-- /.direct-chat-img -->
-                                    <div class="direct-chat-text">
-                                        Is this template really for free? That's unbelievable!
-                                    </div>
-                                    <!-- /.direct-chat-text -->
-                                </div>
-                                <!-- /.direct-chat-msg -->
-                                <!-- Message to the end -->
-                                <div class="direct-chat-msg end">
-                                    <div class="direct-chat-infos clearfix">
-                                        <span class="direct-chat-name float-end"> Sarah Bullock </span>
-                                        <span class="direct-chat-timestamp float-start"> 23 Jan 2:05 pm </span>
-                                    </div>
-                                    <!-- /.direct-chat-infos -->
-                                    <img
-                                        class="direct-chat-img"
-                                        src="./assets/img/user3-128x128.jpg"
-                                        alt="message user image" />
-                                    <!-- /.direct-chat-img -->
-                                    <div class="direct-chat-text">You better believe it!</div>
-                                    <!-- /.direct-chat-text -->
-                                </div>
-                                <!-- /.direct-chat-msg -->
-                                <!-- Message. Default to the start -->
-                                <div class="direct-chat-msg">
-                                    <div class="direct-chat-infos clearfix">
-                                        <span class="direct-chat-name float-start"> Alexander Pierce </span>
-                                        <span class="direct-chat-timestamp float-end"> 23 Jan 5:37 pm </span>
-                                    </div>
-                                    <!-- /.direct-chat-infos -->
-                                    <img
-                                        class="direct-chat-img"
-                                        src="./assets/img/user1-128x128.jpg"
-                                        alt="message user image" />
-                                    <!-- /.direct-chat-img -->
-                                    <div class="direct-chat-text">
-                                        Working with AdminLTE on a great new app! Wanna join?
-                                    </div>
-                                    <!-- /.direct-chat-text -->
-                                </div>
-                                <!-- /.direct-chat-msg -->
-                                <!-- Message to the end -->
-                                <div class="direct-chat-msg end">
-                                    <div class="direct-chat-infos clearfix">
-                                        <span class="direct-chat-name float-end"> Sarah Bullock </span>
-                                        <span class="direct-chat-timestamp float-start"> 23 Jan 6:10 pm </span>
-                                    </div>
-                                    <!-- /.direct-chat-infos -->
-                                    <img
-                                        class="direct-chat-img"
-                                        src="./assets/img/user3-128x128.jpg"
-                                        alt="message user image" />
-                                    <!-- /.direct-chat-img -->
-                                    <div class="direct-chat-text">I would love to.</div>
-                                    <!-- /.direct-chat-text -->
-                                </div>
-                                <!-- /.direct-chat-msg -->
-                            </div>
-                            <!-- /.direct-chat-messages-->
-                            <!-- Contacts are loaded here -->
-                            <div class="direct-chat-contacts">
-                                <ul class="contacts-list">
-                                    <li>
-                                        <a href="#">
-                                            <img
-                                                class="contacts-list-img"
-                                                src="./assets/img/user1-128x128.jpg"
-                                                alt="User Avatar" />
-                                            <div class="contacts-list-info">
-                                                <span class="contacts-list-name">
-                                                    Count Dracula
-                                                    <small class="contacts-list-date float-end"> 2/28/2023 </small>
-                                                </span>
-                                                <span class="contacts-list-msg"> How have you been? I was... </span>
-                                            </div>
-                                            <!-- /.contacts-list-info -->
-                                        </a>
-                                    </li>
-                                    <!-- End Contact Item -->
-                                    <li>
-                                        <a href="#">
-                                            <img
-                                                class="contacts-list-img"
-                                                src="./assets/img/user7-128x128.jpg"
-                                                alt="User Avatar" />
-                                            <div class="contacts-list-info">
-                                                <span class="contacts-list-name">
-                                                    Sarah Doe
-                                                    <small class="contacts-list-date float-end"> 2/23/2023 </small>
-                                                </span>
-                                                <span class="contacts-list-msg"> I will be waiting for... </span>
-                                            </div>
-                                            <!-- /.contacts-list-info -->
-                                        </a>
-                                    </li>
-                                    <!-- End Contact Item -->
-                                    <li>
-                                        <a href="#">
-                                            <img
-                                                class="contacts-list-img"
-                                                src="./assets/img/user3-128x128.jpg"
-                                                alt="User Avatar" />
-                                            <div class="contacts-list-info">
-                                                <span class="contacts-list-name">
-                                                    Nadia Jolie
-                                                    <small class="contacts-list-date float-end"> 2/20/2023 </small>
-                                                </span>
-                                                <span class="contacts-list-msg"> I'll call you back at... </span>
-                                            </div>
-                                            <!-- /.contacts-list-info -->
-                                        </a>
-                                    </li>
-                                    <!-- End Contact Item -->
-                                    <li>
-                                        <a href="#">
-                                            <img
-                                                class="contacts-list-img"
-                                                src="./assets/img/user5-128x128.jpg"
-                                                alt="User Avatar" />
-                                            <div class="contacts-list-info">
-                                                <span class="contacts-list-name">
-                                                    Nora S. Vans
-                                                    <small class="contacts-list-date float-end"> 2/10/2023 </small>
-                                                </span>
-                                                <span class="contacts-list-msg"> Where is your new... </span>
-                                            </div>
-                                            <!-- /.contacts-list-info -->
-                                        </a>
-                                    </li>
-                                    <!-- End Contact Item -->
-                                    <li>
-                                        <a href="#">
-                                            <img
-                                                class="contacts-list-img"
-                                                src="./assets/img/user6-128x128.jpg"
-                                                alt="User Avatar" />
-                                            <div class="contacts-list-info">
-                                                <span class="contacts-list-name">
-                                                    John K.
-                                                    <small class="contacts-list-date float-end"> 1/27/2023 </small>
-                                                </span>
-                                                <span class="contacts-list-msg"> Can I take a look at... </span>
-                                            </div>
-                                            <!-- /.contacts-list-info -->
-                                        </a>
-                                    </li>
-                                    <!-- End Contact Item -->
-                                    <li>
-                                        <a href="#">
-                                            <img
-                                                class="contacts-list-img"
-                                                src="./assets/img/user8-128x128.jpg"
-                                                alt="User Avatar" />
-                                            <div class="contacts-list-info">
-                                                <span class="contacts-list-name">
-                                                    Kenneth M.
-                                                    <small class="contacts-list-date float-end"> 1/4/2023 </small>
-                                                </span>
-                                                <span class="contacts-list-msg"> Never mind I found... </span>
-                                            </div>
-                                            <!-- /.contacts-list-info -->
-                                        </a>
-                                    </li>
-                                    <!-- End Contact Item -->
-                                </ul>
-                                <!-- /.contacts-list -->
-                            </div>
-                            <!-- /.direct-chat-pane -->
-                        </div>
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <form action="#" method="post">
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        name="message"
-                                        placeholder="Type Message ..."
-                                        class="form-control" />
-                                    <span class="input-group-append">
-                                        <button type="button" class="btn btn-primary">Send</button>
+                            <div
+                                class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                <p class="text-success fs-2">
+                                    <svg
+                                        height="32"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        aria-hidden="true">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"></path>
+                                    </svg>
+                                </p>
+                                <p class="d-flex flex-column text-end">
+                                    <span class="fw-bold">
+                                        Ujian Bahasa inggriss
                                     </span>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- /.card-footer-->
-                    </div>
-                    <!-- /.direct-chat -->
-                </div>
-                <!-- /.Start col -->
-                <!-- Start col -->
-                <div class="col-lg-5 connectedSortable">
-                    <div class="card text-white bg-primary bg-gradient border-primary mb-4">
-                        <div class="card-header border-0">
-                            <h3 class="card-title">Sales Value</h3>
-                            <div class="card-tools">
-                                <button
-                                    type="button"
-                                    class="btn btn-primary btn-sm"
-                                    data-lte-toggle="card-collapse">
-                                    <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                    <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                                </button>
+                                    <span class="text-secondary">Selasa, 23 Desember 2025</span>
+                                </p>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <div id="world-map" style="height: 220px"></div>
-                        </div>
-                        <div class="card-footer border-0">
-                            <!--begin::Row-->
-                            <div class="row">
-                                <div class="col-4 text-center">
-                                    <div id="sparkline-1" class="text-dark"></div>
-                                    <div class="text-white">Visitors</div>
-                                </div>
-                                <div class="col-4 text-center">
-                                    <div id="sparkline-2" class="text-dark"></div>
-                                    <div class="text-white">Online</div>
-                                </div>
-                                <div class="col-4 text-center">
-                                    <div id="sparkline-3" class="text-dark"></div>
-                                    <div class="text-white">Sales</div>
-                                </div>
+                            <!-- /.d-flex -->
+                            <div
+                                class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                <p class="text-info fs-2">
+                                    <svg
+                                        height="32"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        aria-hidden="true">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path>
+                                    </svg>
+                                </p>
+                                <p class="d-flex flex-column text-end">
+                                    <span class="fw-bold">
+                                        <i class="bi bi-graph-up-arrow text-info"></i> 0.8%
+                                    </span>
+                                    <span class="text-secondary">SALES RATE</span>
+                                </p>
                             </div>
-                            <!--end::Row-->
+                            <!-- /.d-flex -->
+                            <div class="d-flex justify-content-between align-items-center mb-0">
+                                <p class="text-danger fs-2">
+                                    <svg
+                                        height="32"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        aria-hidden="true">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"></path>
+                                    </svg>
+                                </p>
+                                <p class="d-flex flex-column text-end">
+                                    <span class="fw-bold">
+                                        <i class="bi bi-graph-down-arrow text-danger"></i>
+                                        1%
+                                    </span>
+                                    <span class="text-secondary">REGISTRATION RATE</span>
+                                </p>
+                            </div>
+                            <!-- /.d-flex -->
                         </div>
                     </div>
                 </div>
-                <!-- /.Start col -->
             </div>
-            <!-- /.row (main row) -->
         </div>
         <!--end::Container-->
     </div>

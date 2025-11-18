@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\PesertaModel;
 use App\Models\User;
 use CodeIgniter\I18n\Time;
 
@@ -37,7 +38,8 @@ class Auth extends BaseController
         }
         // Cek user di database
         $userModel = new User();
-        $user = $userModel->where('username', $username)->first();
+        $user = $userModel->select('m_users.*, m_peserta.nama_peserta, m_roles.name')->join("m_peserta", "m_peserta.user_id = m_users.id", "left")->join("m_roles", "m_roles.id = m_users.role_id")->where("username", $username)->first();
+
 
         if (!$user) {
             return redirect()->back()->with('error', 'Username tidak ditemukan.');
@@ -49,7 +51,7 @@ class Auth extends BaseController
         }
 
         //verivikasi role admin
-        if ($user['role_id'] != 1) {
+        if ($user['role_id'] == 3) {
             return redirect()->back()->with('error', 'Akses ditolak. Hanya admin yang dapat login di sini.');
         }
 
@@ -58,7 +60,7 @@ class Auth extends BaseController
             'user_id'   => $user['id'],
             'username'  => $user['username'],
             'role_id'   => $user['role_id'],
-            'name' => $user['name'],
+            'name' => $user["name"],
             'isLoggedIn' => true,
         ];
         session()->set($sessionData);
@@ -78,7 +80,8 @@ class Auth extends BaseController
         }
         // Cek user di database
         $userModel = new User();
-        $user = $userModel->where('username', $username)->first();
+        $user = $userModel->select('m_users.*, m_peserta.nama_peserta, m_roles.name, m_peserta.id_peserta')->join("m_peserta", "m_peserta.user_id = m_users.id", "left")->join("m_roles", "m_roles.id = m_users.role_id")->where("username", $username)->first();
+        // dd($user);
 
         if (!$user) {
             return redirect()->back()->with('error', 'Username tidak ditemukan.');
@@ -86,7 +89,7 @@ class Auth extends BaseController
 
         // Verifikasi password
         if (!password_verify($password, $user['password'])) {
-            return redirect()->with('error', 'Password salah.');
+            return redirect()->back()->with('error', 'Password salah.');
         }
 
         // Set session
@@ -94,7 +97,8 @@ class Auth extends BaseController
             'user_id'   => $user['id'],
             'username'  => $user['username'],
             'role_id'   => $user['role_id'],
-            'name' => $user['name'],
+            'name' =>  $user['nama_peserta'] ?? $user["name"],
+            'id_peserta' => $user['id_peserta'],
             'isLoggedIn' => true,
         ];
         session()->set($sessionData);
@@ -177,14 +181,20 @@ class Auth extends BaseController
             'role_id' => 3, // Default role sebagai Santri
             'username' => $username,
             'email' => $email,
-            'name' => $name,
             'password' => password_hash($password, PASSWORD_DEFAULT),
             'created_at' => Time::now(),
             'updated_at' => Time::now(),
         ];
 
-        $userModel->insert($userData);
 
+
+        $userId = $userModel->insert($userData, true);
+        $pesertaModel = new PesertaModel();
+        $userData = [
+            'user_id' => $userId,
+            'nama_peserta' => $name
+        ];
+        $pesertaModel->insert($userData);
         return redirect()->to('/')->with('success', 'Registrasi berhasil. Silakan login.');
     }
     public function logout()

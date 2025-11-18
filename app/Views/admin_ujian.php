@@ -9,16 +9,18 @@
         <table id="users-table" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>No</th>
                     <th>Nama</th>
-                    <th>Deskripsi</th>
-                    <th>Jumlah Soal</th>
-                    <th>Mata Pelajaran</th>
-                    <th>Aksi</th>
+                    <th>Kode Ujian</th>
+                    <th>Mapel</th>
+                    <th>Mulai</th>
+                    <th>Selesai</th>
+                    <th>Action</th>
                 </tr>
             </thead>
         </table>
     </div>
+
     <!--end::Container-->
 </div>
 <?= $this->endSection("content") ?>
@@ -30,27 +32,35 @@
         $('#users-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '<?= base_url("admin/banksoal") ?>',
+            ajax: '<?= base_url("admin/ujian") ?>',
+            order: [
+                [1, 'asc']
+            ],
             columns: [{
-                    data: 'bank_id'
+                    data: 'no',
+                    orderable: false
                 },
                 {
-                    data: 'nama_bank'
+                    data: 'nama_ujian'
                 },
                 {
-                    data: 'deskripsi'
-                },
-                {
-                    data: 'jumlah_soal'
+                    data: 'kode_ujian'
                 },
                 {
                     data: 'nama_mapel'
+                },
+                {
+                    data: 'tanggal_mulai'
+                },
+                {
+                    data: 'tanggal_selesai',
                 },
                 {
                     data: 'action',
                 }
             ]
         });
+        $("#users-table_wrapper").children(".dt-row").after('<div class="row"><div class="col-3"><a href="<?= base_url("admin/dashboard/ujian/add") ?>" type="button" class="btn btn-primary w-100">Add</a></div></div>');
     });
 </script>
 <?= $this->endSection("scripts") ?>

@@ -15,6 +15,11 @@ class CreatePesertaTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
+            'user_id' => [
+                'type'           => 'INT',
+                'constraint'     => 11,
+                'unsigned'       => true,
+            ],
             'nama_peserta' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '255',
@@ -22,28 +27,24 @@ class CreatePesertaTable extends Migration
             'jk_peserta' => [
                 'type'       => 'ENUM',
                 'constraint' => ['L', 'P'],
+                'null' => true,
+                'default' => null
             ],
             'telp_peserta' => [
                 'type' => 'VARCHAR',
                 'constraint' => '20',
-
-            ],
-            'email_peserta' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-
+                'null' => true,
+                'default' => null
             ],
             'alamat_peserta' => [
                 'type'       => 'TEXT',
+                'null' => true,
+                'default' => null
             ],
-            'password' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-            ],
-
         ]);
 
         $this->forge->addKey('id_peserta', true);
+        $this->forge->addForeignKey('user_id', 'm_user', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('m_peserta');
     }
 
