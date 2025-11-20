@@ -9,7 +9,6 @@ use Hermawan\DataTables\DataTable;
 use App\Models\UjianModel;
 use DateTime;
 
-require "./cronjob.php";
 
 class Ujian extends BaseController
 {
@@ -53,7 +52,8 @@ class Ujian extends BaseController
             $data["waktu_selesai"] = (new DateTime($data["ujian"]["tanggal_selesai"]))->format('H:i');
             $data["durasi"] = sprintf("%02d:%02d", floor($data['ujian']['durasi'] / 60), ($data['ujian']['durasi'] % 60));
         }
-        update_cronjob();
+        $cron = new Cron();
+        $cron->update_cronjob();
         return view('admin_edit_ujian', $data);
     }
 
@@ -81,7 +81,8 @@ class Ujian extends BaseController
         } else {
             $ujianModel->update($id, $req);
         }
-        update_cronjob();
+        $cron = new Cron();
+        $cron->update_cronjob();
         return $this->response->setJSON([
             "success" => true,
             "data" => $req

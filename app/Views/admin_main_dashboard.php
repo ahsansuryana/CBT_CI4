@@ -12,7 +12,7 @@
                     <!--begin::Small Box Widget 1-->
                     <div class="small-box text-bg-primary">
                         <div class="inner">
-                            <h3><?= esc(count($ujian_active)) ?></h3>
+                            <h3>10</h3>
                             <p>Ujian aktif</p>
                         </div>
 
@@ -26,7 +26,7 @@
                                 d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z"></path>
                         </svg>
                         <a
-                            href="<?= base_url("/dashboard/ujian") ?>"
+                            href="#"
                             class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
                             More info <i class="bi bi-link-45deg"></i>
                         </a>
@@ -129,46 +129,81 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <?php foreach ($ujian_active as $ujian) :
-                                $isLast = ($ujian === $ujian_active[count($ujian_active) - 1]);
-                                $date = new DateTime($ujian["tanggal_mulai"]);
-                                $formatter = new IntlDateFormatter(
-                                    'id_ID',
-                                    IntlDateFormatter::FULL,
-                                    IntlDateFormatter::SHORT,
-                                    'Asia/Jakarta',
-                                    IntlDateFormatter::GREGORIAN
-                                );
-                                $tanggal = $formatter->format($date);
-                            ?>
-
-                                <div
-                                    class="d-flex justify-content-between align-items-center <?= $isLast ? "mb-0" : "border-bottom mb-3" ?> ">
-                                    <p class="text-success fs-2">
-                                        <svg
-                                            height="32"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="1.5"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            aria-hidden="true">
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"></path>
-                                        </svg>
-                                    </p>
-                                    <p class="d-flex flex-column text-end">
-                                        <span class="fw-bold">
-                                            <?= esc($ujian["nama_ujian"]) ?>
-                                        </span>
-                                        <span class="text-secondary"><?= esc($tanggal) ?></span>
-                                    </p>
-                                </div>
-                            <?php endforeach; ?>
+                            <div
+                                class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                <p class="text-success fs-2">
+                                    <svg
+                                        height="32"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        aria-hidden="true">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"></path>
+                                    </svg>
+                                </p>
+                                <p class="d-flex flex-column text-end">
+                                    <span class="fw-bold">
+                                        Ujian Bahasa inggriss
+                                    </span>
+                                    <span class="text-secondary">Selasa, 23 Desember 2025</span>
+                                </p>
+                            </div>
                             <!-- /.d-flex -->
-
+                            <div
+                                class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                <p class="text-info fs-2">
+                                    <svg
+                                        height="32"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        aria-hidden="true">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path>
+                                    </svg>
+                                </p>
+                                <p class="d-flex flex-column text-end">
+                                    <span class="fw-bold">
+                                        <i class="bi bi-graph-up-arrow text-info"></i> 0.8%
+                                    </span>
+                                    <span class="text-secondary">SALES RATE</span>
+                                </p>
+                            </div>
+                            <!-- /.d-flex -->
+                            <div class="d-flex justify-content-between align-items-center mb-0">
+                                <p class="text-danger fs-2">
+                                    <svg
+                                        height="32"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        aria-hidden="true">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"></path>
+                                    </svg>
+                                </p>
+                                <p class="d-flex flex-column text-end">
+                                    <span class="fw-bold">
+                                        <i class="bi bi-graph-down-arrow text-danger"></i>
+                                        1%
+                                    </span>
+                                    <span class="text-secondary">REGISTRATION RATE</span>
+                                </p>
+                            </div>
+                            <!-- /.d-flex -->
                         </div>
                     </div>
                 </div>
