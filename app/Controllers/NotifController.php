@@ -7,7 +7,6 @@ use App\Models\NotificationModel;
 use App\Models\UjianModel;
 use DateTime;
 
-require "./cronjob.php";
 class NotifController extends BaseController
 {
     public function send()
@@ -38,7 +37,8 @@ class NotifController extends BaseController
         $user_id = session()->get('user_id');
         $req["user_id"] = $user_id;
         $notificationModel->insert($req);
-        update_cronjob();
+        $cron = new Cron();
+        $cron->update_cronjob();
         return $this->response->setJSON(["status" => "success"]);
     }
 }

@@ -6,7 +6,6 @@ use App\Controllers\BaseController;
 use App\Models\SiswaUjianModel;
 use App\Models\UjianModel;
 
-require "./cronjob.php";
 
 class SantriUjian extends BaseController
 {
@@ -49,7 +48,8 @@ class SantriUjian extends BaseController
                 ]);
             }
         }
-        update_cronjob();
+        $cron = new Cron();
+        $cron->update_cronjob();
         return $this->response->setJSON([
             "status" => 200,
             "success" => false,
