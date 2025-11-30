@@ -17,7 +17,6 @@ class CreatePesertaTable extends Migration
             ],
             'user_id' => [
                 'type'           => 'INT',
-                'constraint'     => 11,
                 'unsigned'       => true,
             ],
             'nama_peserta' => [
@@ -44,7 +43,7 @@ class CreatePesertaTable extends Migration
         ]);
 
         $this->forge->addKey('id_peserta', true);
-        $this->forge->addForeignKey('user_id', 'm_user', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'm_users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('m_peserta');
     }
 

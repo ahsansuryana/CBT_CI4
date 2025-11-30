@@ -30,15 +30,15 @@ class Cron extends BaseController
         $now = new DateTime();
         $start = $now->format("Y-m-d H:i:00");
         $end = $now->modify("+1 hour")->format("Y-m-d H:i:00");
-        echo $start;
-        echo $end;
+        // echo $start;
+        // echo $end;
         $ujianModel = new UjianModel();
         $ujianBuilder = $ujianModel->select("id_ujian, tanggal_mulai, tanggal_selesai")
             ->where("tanggal_mulai >=", $start)->where("tanggal_mulai <", $end)
             ->get();
         $ujian = $ujianBuilder->getResultArray();
         GlobalStore::set("data", $ujian);
-        echo serialize($ujian);
+        // echo serialize($ujian);
     }
 
     public function check_schedule()
