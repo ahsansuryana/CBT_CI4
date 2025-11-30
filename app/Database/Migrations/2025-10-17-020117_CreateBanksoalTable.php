@@ -24,6 +24,7 @@ class CreateBanksoalTable extends Migration
                 'type'       => 'INT',
                 'constraint' => 11,
                 'null'       => true,
+                'unsigned' => true
             ],
             'deskripsi' => [
                 'type' => 'TEXT',
@@ -40,6 +41,7 @@ class CreateBanksoalTable extends Migration
         ]);
 
         $this->forge->addKey('bank_id', true);
+        $this->forge->addForeignKey('mapel_id', 'm_mapel', 'id_mapel', 'CASCADE', 'CASCADE');
         $this->forge->createTable('m_banksoal');
     }
 

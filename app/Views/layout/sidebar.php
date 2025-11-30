@@ -11,28 +11,17 @@ $menu = [
         'url'   => '/dashboard/ujian'
     ],
     [
-        'title' => 'Theme Generate',
-        'icon'  => 'bi bi-palette',
-        'url'   => '/theme'
+        'header' => 'ACCOUNT'
     ],
     [
-        'header' => 'EXAMPLES'
+        'title' => 'Profile',
+        'icon'  => 'fa-solid fa-user',
+        'url'   => '/dashboard/profile'
     ],
     [
-        'title' => 'Auth',
-        'icon'  => 'bi bi-box-arrow-in-right',
-        'submenu' => [
-            ['title' => 'Login', 'url' => '/auth/login'],
-            ['title' => 'Register', 'url' => '/auth/register'],
-        ]
-    ],
-    [
-        'header' => 'DOCUMENTATIONS'
-    ],
-    [
-        'title' => 'Installation',
-        'icon'  => 'bi bi-download',
-        'url'   => '/docs/install'
+        'title' => 'Logout',
+        'icon'  => 'fa-solid fa-arrow-left',
+        'url'   => '/logout'
     ],
 ];
 

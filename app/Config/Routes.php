@@ -47,8 +47,8 @@ $routes->get('/api/check-email', 'Auth::checkEmail');
 $routes->get('/dashboard', 'Dashboard::index', ['filter' => 'auth']);
 $routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
     $routes->get('dashboard/banksoal', 'Banksoal::index');
-    $routes->get('dashboard/banksoal/(:num)', 'Banksoal::edit/$1');
-    $routes->post('dashboard/banksoal/(:num)', 'Banksoal::update/$1');
+    $routes->get('dashboard/banksoal/(:segment)', 'Banksoal::edit/$1');
+    $routes->post('dashboard/banksoal/(:segment)', 'Banksoal::update/$1');
     $routes->get('banksoal', 'Banksoal::getBankSoal');
     $routes->get('getbanksoal', 'Banksoal::get');
     $routes->get('dashboard/ujian', 'Ujian::index');
@@ -63,6 +63,9 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('ujian_active', 'Ujian::ujian_active');
     $routes->post('ujian/register', 'SantriUjian::register_code');
     $routes->post('save-subscription', 'NotifController::register');
+    $routes->get('profile', 'ProfilePeserta::index');
+    $routes->get('profile/edit', 'ProfilePeserta::edit');
+    $routes->post('profile/edit', 'ProfilePeserta::update');
 });
 $routes->get('/bank-soal', 'Banksoal::index', ['filter' => 'auth']);
 /*

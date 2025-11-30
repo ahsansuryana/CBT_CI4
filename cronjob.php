@@ -18,22 +18,22 @@ function update_cronjob()
     $now = new DateTime();
     $start = $now->format("Y-m-d H:i:00");
     $end = $now->modify("+1 hour")->format("Y-m-d H:i:00");
-    echo $start;
-    echo $end;
+    // echo $start;
+    // echo $end;
     $ujianModel = new UjianModel();
     $ujianBuilder = $ujianModel->select("id_ujian, tanggal_mulai, tanggal_selesai")
         ->where("tanggal_mulai >=", $start)->where("tanggal_mulai <", $end)
         ->get();
     $ujian = $ujianBuilder->getResultArray();
     GlobalStore::set("data", $ujian);
-    echo serialize($ujian);
+    // echo serialize($ujian);
 }
 
 function check_schedule()
 {
-    echo "checking schedule\n";
+    // echo "checking schedule\n";
     $data = GlobalStore::get("data");
-    echo json_encode($data) . "\n";
+    // echo json_encode($data) . "\n";
     $now = new DateTime();
     $start = clone $now;
     $end = (clone $now)->modify("+1 minute");

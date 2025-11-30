@@ -20,15 +20,6 @@ class UsersSeeder extends Seeder
                 'updated_at' => Time::now(),
             ],
             [
-                'role_id' => 2, // guru
-                'username' => 'ustadz',
-                'email' => 'guru@example.com',
-                'name' => 'Guru',
-                'password' => password_hash('guru123', PASSWORD_DEFAULT),
-                'created_at' => Time::now(),
-                'updated_at' => Time::now(),
-            ],
-            [
                 'role_id' => 3, // santri
                 'username' => 'ahsan',
                 'email' => 'ahsan@example.com',
