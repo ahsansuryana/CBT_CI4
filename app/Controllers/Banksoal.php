@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use Hermawan\DataTables\DataTable;
 use App\Models\BanksoalModel;
+use App\Models\MapelModel;
 use App\Models\SoalModel;
 
 class Banksoal extends BaseController
@@ -23,7 +24,7 @@ class Banksoal extends BaseController
             ->addNumbering('no')
             ->setSearchableColumns(['nama_bank'])
             ->add('action', function ($row) {
-                return '<button type="button" class="btn btn-primary btn-sm" onclick="window.location.href=\'' . base_url("admin/dashboard/banksoal/" . $row->bank_id) . '\'"><i class="fas fa-edit"></i> Edit</button>';
+                return '<button type="button" class="btn btn-primary btn-sm" onclick="window.location.href=\'' . base_url("admin/dashboard/banksoal/" . $row->bank_id) . '\'"><i class="fas fa-edit"></i> Edit Soal</button><button type="button" class="ms-1 btn btn-primary btn-sm" onclick="window.location.href=\'' . base_url("admin/dashboard/banksoal/edit/" . $row->bank_id) . '\'"><i class="fas fa-edit"></i> Edit Bank</button>';
             }, 'last')
             ->toJson(true);
     }
@@ -35,11 +36,47 @@ class Banksoal extends BaseController
     }
     public function edit($id)
     {
-        $soalModel = new SoalModel();
-        $builder = $soalModel->where('bank_soal_id', $id);
-        $data['soal'] = $builder->get()->getResult();
-        $data['bank_soal_id'] = $id;
-        return view('banksoal_edit', $data);
+        if ($id == "add") {
+            $data['id'] = "add";
+            $mapelModel = new MapelModel();
+            $mapelBuilder = $mapelModel->select('id_mapel, nama_mapel');
+            $data['mapel'] = $mapelBuilder->findAll();
+            return view('edit_bank_soal', $data);
+        } else {
+            $id = (int) $id;
+            $soalModel = new SoalModel();
+            $builder = $soalModel->where('bank_soal_id', $id);
+            $data['soal'] = $builder->get()->getResult();
+            $data['bank_soal_id'] = $id;
+            return view('banksoal_edit', $data);
+        }
+    }
+    public function edit_bank($id)
+    {
+        $data['id'] = $id;
+        $mapelModel = new MapelModel();
+        $banksoalModel = new BanksoalModel();
+        $mapelBuilder = $mapelModel->select('id_mapel, nama_mapel');
+        $banksoalBuilder = $banksoalModel->select("*")->where("bank_id", $id)->first();
+        $data['banksoal'] = $banksoalBuilder;
+        $data['mapel'] = $mapelBuilder->findAll();
+        return view('edit_bank_soal', $data);
+    }
+    public function update_bank($id)
+    {
+        $banksoalModel = new BanksoalModel();
+        $post = $this->request->getPost();
+        $data["nama_bank"] = $post["nama_bank"] ?? "";
+        $data["mapel_id"] = $post["mapel_id"] ?? null;
+        $data["deskripsi"] = $post["deskripsi"] ?? "";
+        if ($id == "add") {
+            $banksoalModel->insert($data);
+            return redirect()->to("admin/dashboard/banksoal");
+        } else {
+            $id = (int) $id;
+            $banksoalModel->update($id, $data);
+            return redirect()->to("admin/dashboard/banksoal");
+        }
     }
     public function update($id)
     {

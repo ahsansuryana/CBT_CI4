@@ -46,7 +46,7 @@
                             </div>
                             <div class="mb-2">
                                 <label class="form-label mb-0 fw-bold">Alamat</label>
-                                <textarea class="form-control" name="alamat_peserta" rows="3" placeholder="Enter ..."><?= esc($alamat_peserta) ?></textarea>
+                                <textarea class="form-control" name="alamat_peserta" rows="3"><?= esc($alamat_peserta) ?></textarea>
                             </div>
                         </div>
                         <!--end::Body-->
