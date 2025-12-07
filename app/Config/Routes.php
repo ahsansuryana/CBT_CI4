@@ -60,8 +60,12 @@ $routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
     $routes->post('dashboard/ujian/(:segment)', 'Ujian::update/$1');
     $routes->get('dashboard/user-control', 'UserControl::index');
     $routes->get('dashboard/user-control/(:segment)', 'UserControl::edit/$1');
+    $routes->post('dashboard/user-control/edit/(:num)', 'UserControl::userEdit/$1');
+    $routes->post('dashboard/user-control/reset/(:num)', 'UserControl::resetPassword/$1');
     $routes->get('user', 'UserControl::getUser');
     $routes->get('mapel', 'Mapel::getMapel');
+    $routes->get('api/check-username', 'Auth::adminCheckUsername');
+    $routes->get('api/check-email', 'Auth::adminCheckEmail');
 });
 $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('ujian', 'Ujian::user_index');
@@ -73,6 +77,11 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->post('profile/edit', 'ProfilePeserta::update');
 });
 $routes->get('/bank-soal', 'Banksoal::index', ['filter' => 'auth']);
+$routes->get('/forgot-password', 'ResetPassword::index');
+$routes->post('/forgot-password', 'ResetPassword::userReset');
+$routes->get('/forgot-password/result', 'ResetPassword::result');
+$routes->get('/reset-password', 'ResetPassword::resetPassword');
+$routes->post('/reset-password', 'ResetPassword::updatePassword');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

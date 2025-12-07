@@ -25,7 +25,7 @@
             </div>
             <!--end::Header-->
             <!--begin::Form-->
-            <form method="post" action="<?= base_url("admin/banksoal/" . $id) ?>">
+            <form method="post" action="<?= base_url("admin/dashboard/user-control/edit/" . $id) ?>">
                 <!--begin::Body-->
                 <input type="hidden" name="id" value="<?= esc($id) ?>">
                 <div class="card-body">
@@ -36,7 +36,7 @@
                             class="form-control"
                             id="username"
                             name="username" value="<?= esc($user["username"]) ?>" required />
-                        <small id="errorUsername" class="text-danger"><?= (isset(session()->getFlashdata('error')["name"])) ? session()->getFlashdata('error')['name'] : "" ?></small>
+                        <small id="errorUsername" class="text-danger"><?= (isset(session()->getFlashdata('error')["username"])) ? session()->getFlashdata('error')['username'] : "" ?></small>
                     </div>
                     <div class="mb-3">
                         <label for="namaIjian" class="form-label">Email</label>
@@ -45,12 +45,12 @@
                             class="form-control"
                             id="email"
                             name="email" value="<?= esc($user["email"]) ?>" required />
-                        <small id="errorEmail" class="text-danger"><?= (isset(session()->getFlashdata('error')["name"])) ? session()->getFlashdata('error')['name'] : "" ?></small>
+                        <small id="errorEmail" class="text-danger"><?= (isset(session()->getFlashdata('error')["email"])) ? session()->getFlashdata('error')['email'] : "" ?></small>
 
                     </div>
                     <div class="mb-3">
-                        <label for="validationCustom05" class="form-label">Mata Pelajaran</label>
-                        <select class="form-select" id="validationCustom05" name="role" required>
+                        <label for="validationCustom05" class="form-label">Role</label>
+                        <select class="form-select" id="validationCustom05" name="role_id" required>
                             <?php
                             foreach ($role as $key => $value) {
                                 echo ("<option value='" . $value['id'] . "' " . ($value['id'] == ($user["role_id"] ?? "") ? "selected" : "") . ">" . $value["name"] . "</option>");
@@ -77,7 +77,7 @@
             </div>
             <!--end::Header-->
             <!--begin::Form-->
-            <form method="post" action="<?= base_url("admin/banksoal/" . $id) ?>">
+            <form method="post" action="<?= base_url("admin/dashboard/user-control/reset/" . $id) ?>">
                 <!--begin::Body-->
                 <input type="hidden" name="id" value="<?= esc($id) ?>">
                 <div class="card-body">
@@ -86,33 +86,37 @@
                         <input
                             type="password"
                             class="form-control"
-                            id="username"
-                            name="username" value="" required />
+                            id="password"
+                            name="admin_password" value="" required />
+                        <small id="errorRole" class="text-danger"><?= (isset(session()->getFlashdata('error')["password"])) ? session()->getFlashdata('error')['password'] : "" ?></small>
+
                     </div>
                     <div class="mb-3">
                         <label for="namaIjian" class="form-label">New User Password</label>
                         <input
                             type="password"
                             class="form-control"
-                            id="password"
-                            name="password" value="" required />
+                            id="new_password"
+                            name="new_password" value="" required />
+                        <small id="errorRole" class="text-danger"><?= (isset(session()->getFlashdata('error')["new_password"])) ? session()->getFlashdata('error')['new_password'] : "" ?></small>
+
                     </div>
-                    <small id="errorPassword" class="text-danger"><?= (isset(session()->getFlashdata('error')["name"])) ? session()->getFlashdata('error')['name'] : "" ?></small>
 
                     <div class="mb-3">
-                        <label for="namaIjian" class="form-label">Confirmation Password Password</label>
+                        <label for="namaIjian" class="form-label">Confirmation Password</label>
                         <input
                             type="password"
                             class="form-control"
-                            id="confirmation"
-                            name="conformation" value="" required />
+                            id="confirmation_password"
+                            name="confirmation_password" value="" required />
+                        <small id="errorRole" class="text-danger"><?= (isset(session()->getFlashdata('error')["confirmation_password"])) ? session()->getFlashdata('error')['confirmation_password'] : "" ?></small>
+
                     </div>
-                    <small id="errorConfirmation" class="text-danger"><?= (isset(session()->getFlashdata('error')["name"])) ? session()->getFlashdata('error')['name'] : "" ?></small>
                 </div>
                 <!--end::Body-->
                 <!--begin::Footer-->
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Reset</button>
                 </div>
                 <!--end::Footer-->
             </form>
@@ -141,13 +145,6 @@
     }
 
     // --- VALIDASI FUNGSIONAL ---
-    async function validateName(value) {
-        if (!value) return 'Nama lengkap wajib diisi.';
-        if (value.length < 3) return 'Nama lengkap minimal 3 karakter.';
-        if (value.length > 100) return 'Nama lengkap maksimal 100 karakter.';
-        if (!/^[A-Za-zÀ-ž\s]+$/.test(value)) return 'Nama lengkap hanya boleh huruf dan spasi.';
-        return '';
-    }
 
     const validateUsername = debounce(async (value) => {
         if (!value) return showError('errorUsername', 'Username wajib diisi.');
@@ -155,7 +152,7 @@
         if (value.length > 50) return showError('errorUsername', 'Username maksimal 50 karakter.');
         if (!/^[a-z0-9]+$/.test(value)) return showError('errorUsername', 'Username hanya huruf kecil & angka tanpa spasi.');
         try {
-            const res = await fetch(`<?= base_url() ?>/api/check-username?username=${value}`);
+            const res = await fetch(`<?= base_url() ?>/admin/api/check-username?username=${value}&id=<?= $id ?>`);
             const data = await res.json();
             if (!data.available) showError('errorUsername', 'Username sudah terdaftar. Silakan pilih username lain.');
             else clearError('errorUsername');
@@ -171,7 +168,7 @@
 
         // Cek ke server
         try {
-            const res = await fetch(`<?= base_url() ?>/api/check-email?email=${encodeURIComponent(value)}`);
+            const res = await fetch(`<?= base_url() ?>/admin/api/check-email?email=${encodeURIComponent(value)}&id=<?= $id ?>`);
             const data = await res.json();
             if (!data.available) {
                 showError('errorEmail', 'Email sudah terdaftar. Silakan gunakan email lain.');
@@ -194,10 +191,6 @@
         if (confirm !== password) return 'Konfirmasi kata sandi tidak sesuai.';
         return '';
     }
-    form.children[0].children[1].addEventListener('input', async (e) => {
-        const err = await validateName(e.target.value.trim());
-        err ? showError('name', err) : clearError('name');
-    });
 
     document.getElementById("username").addEventListener('input', (e) => validateUsername(e.target.value.trim()));
     document.getElementById("email").addEventListener('input', (e) => validateEmail(e.target.value.trim()));
@@ -206,11 +199,11 @@
         const err = validatePassword(e.target.value);
         err ? showError('errorPassword', err) : clearError('errorPassword');
         // Validasi ulang konfirmasi jika sedang diketik
-        const confirmErr = validateConfirm(document.getElementById("confirmation").value, e.target.value);
+        const confirmErr = validateConfirm(document.getElementById("confirmation_password").value, e.target.value);
         confirmErr ? showError('errorConfirm', confirmErr) : clearError('errorConfirm');
     });
 
-    document.getElementById("confirmation").addEventListener('input', (e) => {
+    document.getElementById("confirmation_password").addEventListener('input', (e) => {
         const err = validateConfirm(e.target.value, document.getElementById("password").value);
         err ? showError('errorConfirmation', err) : clearError('errorConfirmation');
     });

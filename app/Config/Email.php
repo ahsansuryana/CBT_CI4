@@ -6,6 +6,19 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->protocol   = env('email.protocol', $this->protocol);
+        $this->SMTPHost   = env('email.SMTPHost', $this->SMTPHost);
+        $this->SMTPUser   = env('email.SMTPUser', $this->SMTPUser);
+        $this->SMTPPass   = env('email.SMTPPass', $this->SMTPPass);
+        $this->SMTPPort   = env('email.SMTPPort', $this->SMTPPort);
+        $this->SMTPCrypto = env('email.SMTPCrypto', $this->SMTPCrypto);
+        $this->mailType   = env('email.mailType', $this->mailType);
+    }
+
     /**
      * @var string
      */
