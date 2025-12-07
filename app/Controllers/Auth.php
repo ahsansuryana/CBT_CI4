@@ -88,6 +88,7 @@ class Auth extends BaseController
         }
 
         // Verifikasi password
+        // dd(password_verify($password, $user['password']), $password, $user['password'], password_hash($password, PASSWORD_DEFAULT));
         if (!password_verify($password, $user['password'])) {
             return redirect()->back()->with('error', 'Password salah.');
         }
@@ -204,7 +205,6 @@ class Auth extends BaseController
     }
     public function checkUsername()
     {
-        // return ("hello");
         $username = $this->request->getGet('username');
         $userModel = new User();
         $user = $userModel->where('username', $username)->first();
@@ -212,7 +212,10 @@ class Auth extends BaseController
         if ($user) {
             return $this->response->setJSON(['available' => false, 'message' => 'Username sudah terdaftar.']);
         } else {
-            return $this->response->setJSON(['available' => true, 'message' => 'Username tersedia.']);
+            return $this->response->setJSON([
+                'available' => true,
+                'message' => 'Username tersedia.',
+            ]);
         }
     }
     public function checkEmail()
@@ -220,6 +223,35 @@ class Auth extends BaseController
         $email = $this->request->getGet('email');
         $userModel = new User();
         $user = $userModel->where('email', $email)->first();
+
+        if ($user) {
+            return $this->response->setJSON(['available' => false, 'message' => 'Email sudah terdaftar.']);
+        } else {
+            return $this->response->setJSON(['available' => true, 'message' => 'Email tersedia.']);
+        }
+    }
+    public function adminCheckUsername()
+    {
+        $username = $this->request->getGet('username');
+        $id = $this->request->getGet('id');
+        $userModel = new User();
+        $user = $userModel->where('username', $username)->where("id !=", $id)->first();
+
+        if ($user) {
+            return $this->response->setJSON(['available' => false, 'message' => 'Username sudah terdaftar.']);
+        } else {
+            return $this->response->setJSON([
+                'available' => true,
+                'message' => 'Username tersedia.',
+            ]);
+        }
+    }
+    public function adminCheckEmail()
+    {
+        $email = $this->request->getGet('email');
+        $id = $this->request->getGet('id');
+        $userModel = new User();
+        $user = $userModel->where('email', $email)->where("id !=", $id)->first();
 
         if ($user) {
             return $this->response->setJSON(['available' => false, 'message' => 'Email sudah terdaftar.']);

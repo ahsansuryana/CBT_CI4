@@ -40,6 +40,16 @@ $admin_menu = [
             ['title' => 'Daftar Ujian', 'url' => '/admin/dashboard/ujian'],
         ]
     ],
+    [
+        'title' => 'User Control',
+        'icon'  => 'fa-solid fa-user',
+        'url' => '/admin/dashboard/user-control'
+    ],
+    [
+        'title' => 'Logout',
+        'icon'  => 'fa-solid fa-arrow-left',
+        'url'   => '/logout'
+    ],
 ];
 
 function renderSidebar(array $menus)
@@ -55,7 +65,7 @@ function renderSidebar(array $menus)
 
         // --- Item biasa / submenu ---
         $hasSub = isset($menu['submenu']);
-        $isActive = isset($menu["url"]) && current_url() == base_url($menu["url"]);
+        $isActive = isset($menu["url"]) && (current_url() == base_url($menu["url"]) || substr(current_url(), 0, strlen(base_url($menu["url"])) == base_url($menu["url"])));
         $icon = $menu['icon'] ?? 'bi bi-circle';
         $title = $menu['title'] ?? '';
         if (isset($menu['url'])) {

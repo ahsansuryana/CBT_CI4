@@ -203,6 +203,9 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Masukkan kata sandi" required>
+                <div class="register-link">
+                    Lupa password? <a href="<?= base_url('forgot-password') ?>">Reset Password</a>
+                </div>
             </div>
 
             <button type="submit" class="btn">Masuk</button>

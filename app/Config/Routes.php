@@ -47,8 +47,10 @@ $routes->get('/api/check-email', 'Auth::checkEmail');
 $routes->get('/dashboard', 'Dashboard::index', ['filter' => 'auth']);
 $routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
     $routes->get('dashboard/banksoal', 'Banksoal::index');
+    $routes->get('dashboard/banksoal/edit/(:segment)', 'Banksoal::edit_bank/$1');
     $routes->get('dashboard/banksoal/(:segment)', 'Banksoal::edit/$1');
     $routes->post('dashboard/banksoal/(:segment)', 'Banksoal::update/$1');
+    $routes->post('banksoal/(:segment)', 'Banksoal::update_bank/$1');
     $routes->get('banksoal', 'Banksoal::getBankSoal');
     $routes->get('getbanksoal', 'Banksoal::get');
     $routes->get('dashboard/ujian', 'Ujian::index');
@@ -56,7 +58,14 @@ $routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
     $routes->get('cek-kode', 'Ujian::cek_kode');
     $routes->get('dashboard/ujian/(:segment)', 'Ujian::edit/$1');
     $routes->post('dashboard/ujian/(:segment)', 'Ujian::update/$1');
+    $routes->get('dashboard/user-control', 'UserControl::index');
+    $routes->get('dashboard/user-control/(:segment)', 'UserControl::edit/$1');
+    $routes->post('dashboard/user-control/edit/(:num)', 'UserControl::userEdit/$1');
+    $routes->post('dashboard/user-control/reset/(:num)', 'UserControl::resetPassword/$1');
+    $routes->get('user', 'UserControl::getUser');
     $routes->get('mapel', 'Mapel::getMapel');
+    $routes->get('api/check-username', 'Auth::adminCheckUsername');
+    $routes->get('api/check-email', 'Auth::adminCheckEmail');
 });
 $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('ujian', 'Ujian::user_index');
@@ -68,6 +77,11 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->post('profile/edit', 'ProfilePeserta::update');
 });
 $routes->get('/bank-soal', 'Banksoal::index', ['filter' => 'auth']);
+$routes->get('/forgot-password', 'ResetPassword::index');
+$routes->post('/forgot-password', 'ResetPassword::userReset');
+$routes->get('/forgot-password/result', 'ResetPassword::result');
+$routes->get('/reset-password', 'ResetPassword::resetPassword');
+$routes->post('/reset-password', 'ResetPassword::updatePassword');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
