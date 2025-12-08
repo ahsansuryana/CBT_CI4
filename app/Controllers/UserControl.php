@@ -3,8 +3,10 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\PesertaModel;
 use App\Models\RoleModel;
 use App\Models\User;
+use CodeIgniter\I18n\Time;
 use Hermawan\DataTables\DataTable;
 
 class UserControl extends BaseController
@@ -18,7 +20,7 @@ class UserControl extends BaseController
     {
         $userModel = new User();
         $builder = $userModel->select('m_users.id, m_users.username, m_users.email, m_roles.name')
-            ->join('m_roles', 'm_roles.id = m_users.id');
+            ->join('m_roles', 'm_roles.id = m_users.role_id');
         return DataTable::of($builder)
             ->addNumbering('no')
             ->add('action', function ($row) {
@@ -29,14 +31,19 @@ class UserControl extends BaseController
 
     public function edit($id)
     {
-        $userModel = new User();
-        $userBuilder = $userModel->select('id, username, email, role_id')->where("id", $id)->first();
         $roleModel = new RoleModel();
         $roleBuilder = $roleModel->select("*")->get()->getResultArray();
-        $data["id"] = $id;
         $data["role"] = $roleBuilder;
-        $data["user"] = $userBuilder;
-        return view("edit_user_control", $data);
+        if ($id == "add") {
+            $data["id"] = "add";
+            return view('admin_add_user', $data);
+        } else {
+            $userModel = new User();
+            $userBuilder = $userModel->select('id, username, email, role_id')->where("id", $id)->first();
+            $data["id"] = (int) $id;
+            $data["user"] = $userBuilder;
+            return view("edit_user_control", $data);
+        }
     }
     public function userEdit($id)
     {
@@ -69,14 +76,69 @@ class UserControl extends BaseController
         if (! $this->validate($rules)) {
             return redirect()->to("admin/dashboard/user-control/" . $id)->with('error', $this->validator->getErrors());
         }
-        $data = [
-            "username" => $username,
-            "email" => $email,
-            "role_id" => $role_id
-        ];
-        $userModel = new User();
-        $userModel->update($id, $data);
-        return redirect()->to("admin/dashboard/user-control");
+        if ($id == "add") {
+            $password = $this->request->getPost("password");
+            $name = $this->request->getPost("name");
+            $rules = [
+                'name' => [
+                    'label' => 'Nama',
+                    'rules' => 'required|min_length[3]|max_length[100]|alpha_space',
+                    'errors' => [
+                        'required' => 'Nama lengkap sandi wajib diisi.',
+                        'max_length' => 'Nama lngkap maksimal {param} karakter.',
+                        'min_length' => 'Nama lengkap minimal {param} karakter.',
+                        'alpha_space' => 'Nama lengkap hanya boleh berisi huruf dan spasi.'
+                    ]
+                ],
+                'password' => [
+                    'label' => 'Kata Sandi',
+                    'rules' => 'required|min_length[8]',
+                    'errors' => [
+                        'required' => 'Kata Sandi wajib diisi.',
+                        'min_length' => 'Kata Sandi minimal {param} karakter.'
+                    ]
+                ],
+                'confirmation_password' => [
+                    'label' => 'Konfirmasi Kata Sandi',
+                    'rules' => 'required|matches[password]',
+                    'errors' => [
+                        'required' => 'Konfirmasi Kata Sandi wajib diisi.',
+                        'matches' => 'Konfirmasi Kata Sandi tidak sesuai dengan Kata Sandi.'
+                    ]
+                ],
+            ];
+            if (! $this->validate($rules)) {
+                return redirect()->to("admin/dashboard/user-control/" . $id)->with('error', $this->validator->getErrors());
+            }
+            $userModel = new User();
+            // Simpan user baru ke database
+            $userData = [
+                'role_id' => $role_id, // Default role sebagai Santri
+                'username' => $username,
+                'email' => $email,
+                'password' => password_hash($password, PASSWORD_DEFAULT),
+                'created_at' => Time::now(),
+                'updated_at' => Time::now(),
+            ];
+            $userId = $userModel->insert($userData, true);
+            $pesertaModel = new PesertaModel();
+            $userData = [
+                'user_id' => $userId,
+                'nama_peserta' => $name
+            ];
+            $pesertaModel->insert($userData);
+            return redirect()->to("admin/dashboard/user-control");
+        } else {
+            $id = (int) $id;
+            $data = [
+                "username" => $username,
+                "email" => $email,
+                "role_id" => $role_id
+            ];
+            $userModel = new User();
+            $userModel->update($id, $data);
+            return redirect()->to("admin/dashboard/user-control");
+        }
     }
     public function resetPassword($id)
     {
