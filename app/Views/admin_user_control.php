@@ -53,7 +53,7 @@
                 }
             ]
         });
-        $("#users-table_wrapper").children(".dt-row").after('<div class="row"><div class="col-3"><a href="<?= base_url("admin/dashboard/ujian/add") ?>" type="button" class="btn btn-primary w-100">Add</a></div></div>');
+        $("#users-table_wrapper").children(".dt-row").after('<div class="row"><div class="col-3"><a href="<?= base_url("admin/dashboard/user-control/add") ?>" type="button" class="btn btn-primary w-100">Add</a></div></div>');
     });
 </script>
 <?= $this->endSection("scripts") ?>

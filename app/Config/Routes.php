@@ -60,7 +60,7 @@ $routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
     $routes->post('dashboard/ujian/(:segment)', 'Ujian::update/$1');
     $routes->get('dashboard/user-control', 'UserControl::index');
     $routes->get('dashboard/user-control/(:segment)', 'UserControl::edit/$1');
-    $routes->post('dashboard/user-control/edit/(:num)', 'UserControl::userEdit/$1');
+    $routes->post('dashboard/user-control/edit/(:segment)', 'UserControl::userEdit/$1');
     $routes->post('dashboard/user-control/reset/(:num)', 'UserControl::resetPassword/$1');
     $routes->get('user', 'UserControl::getUser');
     $routes->get('mapel', 'Mapel::getMapel');
