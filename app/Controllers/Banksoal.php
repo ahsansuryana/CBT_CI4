@@ -91,4 +91,8 @@ class Banksoal extends BaseController
         $soalModel->update($soalData["id"], $soalData["data"]);
         return $this->response->setJSON(['status' => 'success', 'message' => 'Soal updated successfully']);
     }
+    public function edit_soal($id_soal)
+    {
+        return view('banksoal_edit');
+    }
 }

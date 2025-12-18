@@ -48,6 +48,7 @@ $routes->get('/dashboard', 'Dashboard::index', ['filter' => 'auth']);
 $routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
     $routes->get('dashboard/banksoal', 'Banksoal::index');
     $routes->get('dashboard/banksoal/edit/(:segment)', 'Banksoal::edit_bank/$1');
+    $routes->get('dashboard/banksoal/soal/(:segment)', 'Banksoal::edit_soal/$1');
     $routes->get('dashboard/banksoal/(:segment)', 'Banksoal::edit/$1');
     $routes->post('dashboard/banksoal/(:segment)', 'Banksoal::update/$1');
     $routes->post('banksoal/(:segment)', 'Banksoal::update_bank/$1');
