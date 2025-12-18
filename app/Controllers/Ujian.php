@@ -397,19 +397,21 @@ class Ujian extends BaseController
                 $jawabanBenar[$soal['nomor']] = $soal;
             }
             for ($i = 1; $i <= count($kunci_acak); $i++) {
-                $jawaban = $siswaJawaban[$i]['jawaban'];
-                $kunciJawaban = $jawabanBenar[$kunci_acak[$i - 1]]['jawaban_benar'];
-                if ($jawaban == $kunciJawaban) {
-                    $data[] = [
-                        'id_siswaJawaban' => $siswaJawaban[$i]['id_siswaJawaban'],
-                        'benar' => 'Y',
-                    ];
-                    $countBenar++;
-                } else {
-                    $data[] = [
-                        'id_siswaJawaban' => $siswaJawaban[$i]['id_siswaJawaban'],
-                        'benar' => 'N'
-                    ];
+                if (isset($siswaJawaban[$i])) {
+                    $jawaban = $siswaJawaban[$i]['jawaban'];
+                    $kunciJawaban = $jawabanBenar[$kunci_acak[$i - 1]]['jawaban_benar'];
+                    if ($jawaban == $kunciJawaban) {
+                        $data[] = [
+                            'id_siswaJawaban' => $siswaJawaban[$i]['id_siswaJawaban'],
+                            'benar' => 'Y',
+                        ];
+                        $countBenar++;
+                    } else {
+                        $data[] = [
+                            'id_siswaJawaban' => $siswaJawaban[$i]['id_siswaJawaban'],
+                            'benar' => 'N'
+                        ];
+                    }
                 }
             }
             $siswaJawabanModel->updateBatch($data, 'id_siswaJawaban');
