@@ -2,6 +2,8 @@
 
 namespace App\Filters;
 
+use App\Models\SiswaJawabanModel;
+use App\Models\SiswaUjianModel;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -35,6 +37,28 @@ class Auth implements FilterInterface
             if (session()->get('role_id') !== '1') {
                 // Jika bukan admin, redirect ke halaman dashboard
                 return redirect()->to('/dashboard');
+            }
+        }
+        if (isset($arguments[0]) && $arguments[0] === 'santri') {
+            // Cek apakah user adalah admin
+            if (session()->get('role_id') !== '2') {
+                // Jika bukan admin, redirect ke halaman dashboard
+                return redirect()->to('/dashboard');
+            }
+        }
+        if (isset($arguments[0]) && $arguments[0] === 'ujian') {
+            // Cek apakah user adalah admin
+            if (session()->get('role_id') !== '2') {
+                // Jika bukan admin, redirect ke halaman dashboard
+                return redirect()->to('/dashboard');
+            }
+            $id_peserta = session()->get('id_peserta');
+            $id_siswaUjian = service('uri')->getSegment(2);
+            $siswaUjianModel = new SiswaUjianModel();
+            // dd($id_peserta, $id_siswaUjian);
+            $siswaUjianBuilder = $siswaUjianModel->select('peserta_id')->where('id_siswaUjian', $id_siswaUjian)->where('peserta_id', $id_peserta)->first();
+            if ($siswaUjianBuilder == null) {
+                return redirect()->to('/dashboard/ujian');
             }
         }
     }

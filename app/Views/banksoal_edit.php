@@ -208,11 +208,11 @@
                         </div>
                         <div class="row">
                             <div class="col-3 pe-0">
-                                <button id="edit" class="btn btn-primary col-12" onclick="edit(<?= $soal[0]->id_soal ?>)" type="button">Edit</button>
+                                <button id="edit" class="btn btn-primary col-12" onclick="edit(<?= $s->id_soal ?>)" type="button">Edit</button>
 
                             </div>
                             <div class="col-3 pe-0">
-                                <button id="save" class="btn btn-primary col-12" onclick="save(<?= $soal[0]->id_soal ?>)" type="button">Save</button>
+                                <button id="save" class="btn btn-primary col-12" onclick="save(<?= $s->id_soal ?>)" type="button">Save</button>
 
                             </div>
 
@@ -240,6 +240,7 @@
 <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
 <script>
     var edit = function(soalId) {
+        console.log(soalId);
         $("." + soalId).summernote();
         const span = $(".bobot" + soalId)
         const val = span.text();

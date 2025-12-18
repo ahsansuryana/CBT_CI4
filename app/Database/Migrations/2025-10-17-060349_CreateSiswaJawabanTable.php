@@ -15,15 +15,15 @@ class CreateSiswaJawabanTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'pesertaUjian_id' => [
+            'siswaUjian_id' => [
                 'type'       => 'INT',
                 'unsigned'   => true,
                 'constraint' => 11,
             ],
-            'soal_id' => [
+            'nomor' => [
                 'type'       => 'INT',
-                'unsigned'   => true,
-                'constraint' => 11,
+                'constraint' => 3,
+                'unsigned'       => true,
             ],
             'jawaban' => [
                 'type'       => 'VARCHAR',
@@ -39,6 +39,10 @@ class CreateSiswaJawabanTable extends Migration
                 'constraint' => '5,2',
                 'default'    => 0.00,
             ],
+            'ragu' => [
+                'type'       => 'BOOLEAN',
+                'default' => false,
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true,
@@ -51,7 +55,6 @@ class CreateSiswaJawabanTable extends Migration
 
         $this->forge->addKey('id_siswaJawaban', true);
         $this->forge->addForeignKey('pesertaUjian_id', 'siswa_ujian', 'id_siswaUjian', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('soal_id', 'm_soal', 'id_soal', 'CASCADE', 'CASCADE');
         $this->forge->createTable('siswa_jawaban');
     }
 
