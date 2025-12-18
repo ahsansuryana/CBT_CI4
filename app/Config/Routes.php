@@ -67,8 +67,9 @@ $routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
     $routes->get('api/check-username', 'Auth::adminCheckUsername');
     $routes->get('api/check-email', 'Auth::adminCheckEmail');
 });
-$routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
+$routes->group('dashboard', ['filter' => 'auth:santri'], function ($routes) {
     $routes->get('ujian', 'Ujian::user_index');
+    $routes->get('ujian/(:num)', 'Ujian::start_ujian/$1');
     $routes->get('ujian_active', 'Ujian::ujian_active');
     $routes->post('ujian/register', 'SantriUjian::register_code');
     $routes->post('save-subscription', 'NotifController::register');
@@ -76,6 +77,9 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('profile/edit', 'ProfilePeserta::edit');
     $routes->post('profile/edit', 'ProfilePeserta::update');
 });
+$routes->get('/ujian/(:num)', 'Ujian::get_ujian_page/$1', ['filter' => 'auth:ujian']);
+$routes->get('/ujian/(:num)/report', 'Ujian::report/$1', ['filter' => 'auth:ujian']);
+$routes->post('/ujian/(:num)', 'Ujian::jawab_soal/$1', ['filter' => 'auth:ujian']);
 $routes->get('/bank-soal', 'Banksoal::index', ['filter' => 'auth']);
 $routes->get('/forgot-password', 'ResetPassword::index');
 $routes->post('/forgot-password', 'ResetPassword::userReset');

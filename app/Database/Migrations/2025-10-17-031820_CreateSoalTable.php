@@ -31,6 +31,7 @@ class CreateSoalTable extends Migration
                 'type'       => 'INT',
                 'constraint' => 3,
                 'null'       => true,
+                'unsigned'       => true,
             ],
             'bobot' => [
                 'type'       => 'DECIMAL',

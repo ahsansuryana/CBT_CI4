@@ -57,6 +57,11 @@ class CreateSiswaujianTable extends Migration
                 'constraint' => 4,
                 'default'    => 0,
             ],
+            'kunci_acak' => [
+                'type'       => 'TEXT',
+                'null' => true,
+                'default'    => null,
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true,

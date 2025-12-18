@@ -4,17 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class SiswaUjianModel extends Model
+class SiswaJawabanModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'siswa_ujian';
-    protected $primaryKey       = 'id_siswaUjian';
+    protected $table            = 'siswa_jawaban';
+    protected $primaryKey       = 'id_siswaJawaban';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["id_siswaUjian", "ujian_id", "peserta_id", "mulai_ujian", "selesai_ujian", "status", "nilai", "benar", "salah", "kosong", "kunci_acak"];
+    protected $allowedFields    = ['id_siswaJawaban', 'siswaUjian_id', 'nomor', 'jawaban', 'benar', 'nilai', 'ragu', 'created_at', 'updated_at'];
 
     // Dates
     protected $useTimestamps = false;
