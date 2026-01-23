@@ -7,6 +7,7 @@ use Hermawan\DataTables\DataTable;
 use App\Models\BanksoalModel;
 use App\Models\MapelModel;
 use App\Models\SoalModel;
+use App\Helpers\SoalHelper;
 
 class Banksoal extends BaseController
 {
@@ -93,6 +94,92 @@ class Banksoal extends BaseController
     }
     public function edit_soal($id_soal)
     {
-        return view('banksoal_edit');
+        $soalModel = new soalModel();
+        $soalBuilder = $soalModel->select("*")
+            ->where('id_soal', $id_soal)->first();
+        if ($soalBuilder == null) {
+            return redirect()->back();
+        }
+        $soalBuilder['pertanyaan'] = SoalHelper::parseJsonToHtml($soalBuilder['pertanyaan'], 'pertanyaan');
+        $data['soal'] = $soalBuilder;
+        $data['id_soal'] = $id_soal;
+        // dd($soalBuilder);
+        return view('edit_soal', $data);
+    }
+
+    public function update_soal($id_soal)
+    {
+        $soalModel = new SoalModel();
+        $post = $this->request->getPost();
+        $file = $this->request->getFiles();
+        $indexName = ['pertanyaan', 'opsi_a', 'opsi_b', 'opsi_c', 'opsi_d', 'opsi_e', 'pembahasan'];
+        $soalBuilder = $soalModel->select('*')->where('id_soal', $id_soal)->first();
+        // dd($file);
+        //hapus file berhubungan
+        foreach ($indexName as $name) {
+            foreach ($post[$name] as $key => $value) {
+                $value = json_decode($value, true);
+                if ($value['type'] == 'audio' || $value['type'] == 'image') {
+                    if ($file[$value['fileIndex']]->getError() === UPLOAD_ERR_NO_FILE) {
+                        if (isset($value['src'])) {
+                            $uniqueId = round(microtime(true) * 1000) . '_' . substr(bin2hex(random_bytes(5)), 0, 9);
+                            $ext = explode('.', $value['src']);
+                            $ext = $ext[count($ext) - 1];
+                            $newFileName = $uniqueId . "." . $ext;
+                            $prevPath = FCPATH . 'uploads/' . $value['type'] . '/' . $value['src'];
+                            $newPath = FCPATH . 'uploads/' . $value['type'] . '/' . $newFileName;
+                            if (file_exists($prevPath)) {
+                                rename($prevPath, $newPath);
+                            }
+                            $value['src'] = $newFileName;
+                            continue;
+                        } else {
+                            throw new \RuntimeException('File Tidak DI temukan');
+                        }
+                    }
+                    if ($file[$value['fileIndex']]->getSizeByUnit('mb') > 2) {
+                        throw new \RuntimeException('Ukuran file terlalu besar');
+                    }
+
+                    if ($value['type'] == 'image') {
+                        $allowedExt = ['jpg', 'png', 'jpeg', 'webp'];
+                    }
+                    if ($value['type'] == 'audio') {
+                        $allowedExt = ['mp3'];
+                    }
+                    if (! in_array(strtolower($file[$value['fileIndex']]->getClientExtension()), $allowedExt)) {
+                        // dd($allowedExt, strtolower($file[$value['fileIndex']]->getClientExtension()), $file[$value['fileIndex']]);
+                        throw new \RuntimeException('Ekstensi tidak valid');
+                    }
+                    $namaBaru = $file[$value['fileIndex']]->getRandomName();
+                    $file[$value['fileIndex']]->move(FCPATH  . 'uploads/' . $value['type'], $namaBaru);
+                    unset($value['fileIndex']);
+                    $value['src'] = $namaBaru;
+                }
+                $post[$name][$key] = $value;
+            }
+            $soalBuilder[$name] = json_decode($soalBuilder[$name], true);
+            foreach ($soalBuilder[$name] as $block) {
+                if ($block['type'] == 'image' || $block['type'] == 'audio') {
+                    $filePath = FCPATH . 'uploads/' . $block['type'] . '/' . $block['src'];
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
+                }
+            }
+
+            $post[$name] = json_encode($post[$name]);
+        }
+        $data = [
+            'pertanyaan' => $post['pertanyaan'],
+            'opsi_a' => $post['opsi_a'],
+            'opsi_b' => $post['opsi_b'],
+            'opsi_c' => $post['opsi_c'],
+            'opsi_d' => $post['opsi_d'],
+            'opsi_e' => $post['opsi_e'],
+            'pembahasan' => $post['pembahasan'],
+        ];
+        $soalBuilder = $soalModel->update($id_soal, $data);
+        dd($post, $file, function_exists('imagewebp'));
     }
 }

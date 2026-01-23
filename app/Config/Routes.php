@@ -48,7 +48,8 @@ $routes->get('/dashboard', 'Dashboard::index', ['filter' => 'auth']);
 $routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
     $routes->get('dashboard/banksoal', 'Banksoal::index');
     $routes->get('dashboard/banksoal/edit/(:segment)', 'Banksoal::edit_bank/$1');
-    $routes->get('dashboard/banksoal/soal/(:segment)', 'Banksoal::edit_soal/$1');
+    $routes->get('dashboard/banksoal/soal/(:num)', 'Banksoal::edit_soal/$1');
+    $routes->post('dashboard/banksoal/soal/(:num)', 'Banksoal::update_soal/$1');
     $routes->get('dashboard/banksoal/(:segment)', 'Banksoal::edit/$1');
     $routes->post('dashboard/banksoal/(:segment)', 'Banksoal::update/$1');
     $routes->post('banksoal/(:segment)', 'Banksoal::update_bank/$1');
@@ -68,6 +69,7 @@ $routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
     $routes->get('api/check-username', 'Auth::adminCheckUsername');
     $routes->get('api/check-email', 'Auth::adminCheckEmail');
 });
+
 $routes->group('dashboard', ['filter' => 'auth:santri'], function ($routes) {
     $routes->get('ujian', 'Ujian::user_index');
     $routes->get('ujian/(:num)', 'Ujian::start_ujian/$1');

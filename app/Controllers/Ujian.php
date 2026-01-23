@@ -270,7 +270,7 @@ class Ujian extends BaseController
         $siswaUjianBuilder['id_siswaUjian'] = $id_siswaUjian;
         $siswaUjianBuilder['sisa_detik'] =  $sisa_detik;
 
-        dd($siswaUjianBuilder);
+        // dd($siswaUjianBuilder);
         return view('main_ujian', $siswaUjianBuilder);
     }
     public function jawab_soal($id_siswaUjian)
