@@ -100,6 +100,7 @@ class Banksoal extends BaseController
         if ($soalBuilder == null) {
             return redirect()->back();
         }
+        // dd()
         $soalBuilder['pertanyaan'] = SoalHelper::parseJsonToHtml($soalBuilder['pertanyaan'], 'pertanyaan');
         $data['soal'] = $soalBuilder;
         $data['id_soal'] = $id_soal;
@@ -112,74 +113,166 @@ class Banksoal extends BaseController
         $soalModel = new SoalModel();
         $post = $this->request->getPost();
         $file = $this->request->getFiles();
+
         $indexName = ['pertanyaan', 'opsi_a', 'opsi_b', 'opsi_c', 'opsi_d', 'opsi_e', 'pembahasan'];
         $soalBuilder = $soalModel->select('*')->where('id_soal', $id_soal)->first();
         // dd($file);
-        //hapus file berhubungan
-        foreach ($indexName as $name) {
-            foreach ($post[$name] as $key => $value) {
-                $value = json_decode($value, true);
-                if ($value['type'] == 'audio' || $value['type'] == 'image') {
-                    if ($file[$value['fileIndex']]->getError() === UPLOAD_ERR_NO_FILE) {
-                        if (isset($value['src'])) {
-                            $uniqueId = round(microtime(true) * 1000) . '_' . substr(bin2hex(random_bytes(5)), 0, 9);
-                            $ext = explode('.', $value['src']);
-                            $ext = $ext[count($ext) - 1];
-                            $newFileName = $uniqueId . "." . $ext;
-                            $prevPath = FCPATH . 'uploads/' . $value['type'] . '/' . $value['src'];
-                            $newPath = FCPATH . 'uploads/' . $value['type'] . '/' . $newFileName;
-                            if (file_exists($prevPath)) {
-                                rename($prevPath, $newPath);
-                            }
-                            $value['src'] = $newFileName;
-                            continue;
-                        } else {
-                            throw new \RuntimeException('File Tidak DI temukan');
-                        }
-                    }
-                    if ($file[$value['fileIndex']]->getSizeByUnit('mb') > 2) {
-                        throw new \RuntimeException('Ukuran file terlalu besar');
-                    }
-
-                    if ($value['type'] == 'image') {
-                        $allowedExt = ['jpg', 'png', 'jpeg', 'webp'];
-                    }
-                    if ($value['type'] == 'audio') {
-                        $allowedExt = ['mp3'];
-                    }
-                    if (! in_array(strtolower($file[$value['fileIndex']]->getClientExtension()), $allowedExt)) {
-                        // dd($allowedExt, strtolower($file[$value['fileIndex']]->getClientExtension()), $file[$value['fileIndex']]);
-                        throw new \RuntimeException('Ekstensi tidak valid');
-                    }
-                    $namaBaru = $file[$value['fileIndex']]->getRandomName();
-                    $file[$value['fileIndex']]->move(FCPATH  . 'uploads/' . $value['type'], $namaBaru);
-                    unset($value['fileIndex']);
-                    $value['src'] = $namaBaru;
+        // rubah ke json
+        $post['pertanyaan'] = array_map(function ($block) {
+            return json_decode($block, true);
+        }, $post['pertanyaan']);
+        d($post['pertanyaan']);
+        // hapus yang tidak ada file upload atau src nya
+        $post['pertanyaan'] = array_filter($post['pertanyaan'], function ($block) use ($file) {
+            if ($block['type'] == "text") {
+                return true;
+            } elseif ($block['type'] == "image" || $block['type'] == "audio") {
+                if (isset($block['src'])) {
+                    return true;
+                } elseif (!$file[$block['fileIndex']] || !$file[$block['fileIndex']]->isValid()) {
+                    return false;
+                } elseif (isset($block['fileIndex']) && $file[$block['fileIndex']]->getError() === UPLOAD_ERR_NO_FILE) {
+                    return false;
+                } else {
+                    return true;
                 }
-                $post[$name][$key] = $value;
+            } else {
+                return false;
             }
-            $soalBuilder[$name] = json_decode($soalBuilder[$name], true);
-            foreach ($soalBuilder[$name] as $block) {
-                if ($block['type'] == 'image' || $block['type'] == 'audio') {
-                    $filePath = FCPATH . 'uploads/' . $block['type'] . '/' . $block['src'];
-                    if (file_exists($filePath)) {
-                        unlink($filePath);
-                    }
+        });
+        d($post['pertanyaan']);
+        // upload seluruh file
+        foreach ($post['pertanyaan'] as $i => $block) {
+            d($block['type'] == 'image' || $block['type'] == 'audio');
+            if ($block['type'] == 'image' || $block['type'] == 'audio') {
+                $fileUpload = $file[$block['fileIndex']];
+                $fileMimeType = $fileUpload->getMimeType();
+                $fileExtension = $fileUpload->getExtension();
+                // cek extensi
+                if ($block['type'] == 'image' && !in_array($fileMimeType, ['image/jpeg', 'image/png'])) {
+                    continue;
+                } elseif ($block['type'] == 'audio' && $fileMimeType != 'audio/mpeg') {
+                    continue;
                 }
-            }
 
-            $post[$name] = json_encode($post[$name]);
+                $uniqueId = round(microtime(true) * 1000) . '_' . substr(bin2hex(random_bytes(5)), 0, 9);
+                $newFileName = $uniqueId . "." . $fileExtension;
+                $folderPath = WRITEPATH . 'uploads\\' . $block['type'];
+                // dd($folderPath, $newFileName);
+                $fileUpload->move($folderPath, $newFileName);
+                $post['pertanyaan'][$i]['src'] = $newFileName;
+                unset($post['pertanyaan'][$i]['fileIndex']);
+            }
         }
+        // dd($post, $file);
+        //ekstract src
+        $image_array_src = array_values(array_filter(array_map(function ($block) {
+            if ($block['type'] == 'image') {
+                return 'image\\' . $block['src'];
+            }
+            if ($block['type'] == 'audio') {
+                return 'audio\\' . $block['src'];
+            }
+        }, $post["pertanyaan"]), function ($block) {
+            return $block != null;
+        }));
+
+        $soalBuilder['pertanyaan'] = json_decode($soalBuilder['pertanyaan'], true);
+        $image_db_array_src =
+            array_values(array_filter(array_map(function ($block) {
+                if ($block['type'] == 'image') {
+                    return 'image\\' . $block['src'];
+                }
+                if ($block['type'] == 'audio') {
+                    return 'audio\\' . $block['src'];
+                }
+            }, $soalBuilder["pertanyaan"]), function ($block) {
+                return $block != null;
+            }));
+
+        $trash_file = array_diff($image_db_array_src, $image_array_src);
+        foreach ($trash_file as $file_name) {
+            $base_path = WRITEPATH . 'uploads\\';
+            $file_path = $base_path . $file_name;
+            if (is_file($file_path)) {
+                unlink($file_path);
+            }
+        }
+        // array_filter(function ($block) {
+        //     $block = json_decode($block, true);
+        //     $is_block_file_update = ($block['type'] == 'image' || $block['type'] == 'audio') && isset($block['fileIndex']);
+        //     if ($is_block_file_update) {
+        //         if ($file[$block['fileIndex']]->getError() === UPLOAD_ERR_NO_FILE) {
+        //             return false;
+        //         }
+        //     }
+        // });
+        // foreach ($post['pertanyaan'] as $block) {
+        //     $block = json_decode($block, true);
+        //     $is_block_file_update = ($block['type'] == 'image' || $block['type'] == 'audio') && isset($block['fileIndex']);
+        //     if ($is_block_file_update) {
+        //     }
+        // }
+        //hapus file berhubungan
+        // foreach ($indexName as $name) {
+        //     foreach ($post[$name] as $key => $value) {
+        //         $value = json_decode($value, true);
+        //         if ($value['type'] == 'audio' || $value['type'] == 'image') {
+        //             if ($file[$value['fileIndex']]->getError() === UPLOAD_ERR_NO_FILE) {
+        //                 if (isset($value['src'])) {
+        //                     $uniqueId = round(microtime(true) * 1000) . '_' . substr(bin2hex(random_bytes(5)), 0, 9);
+        //                     $ext = explode('.', $value['src']);
+        //                     $ext = $ext[count($ext) - 1];
+        //                     $newFileName = $uniqueId . "." . $ext;
+        //                     $prevPath = FCPATH . 'uploads/' . $value['type'] . '/' . $value['src'];
+        //                     $newPath = FCPATH . 'uploads/' . $value['type'] . '/' . $newFileName;
+        //                     if (file_exists($prevPath)) {
+        //                         rename($prevPath, $newPath);
+        //                     }
+        //                     $value['src'] = $newFileName;
+        //                     continue;
+        //                 } else {
+        //                     throw new \RuntimeException('File Tidak DI temukan');
+        //                 }
+        //             }
+        //             if ($file[$value['fileIndex']]->getSizeByUnit('mb') > 2) {
+        //                 throw new \RuntimeException('Ukuran file terlalu besar');
+        //             }
+
+        //             if ($value['type'] == 'image') {
+        //                 $allowedExt = ['jpg', 'png', 'jpeg', 'webp'];
+        //             }
+        //             if ($value['type'] == 'audio') {
+        //                 $allowedExt = ['mp3'];
+        //             }
+        //             if (! in_array(strtolower($file[$value['fileIndex']]->getClientExtension()), $allowedExt)) {
+        //                 // dd($allowedExt, strtolower($file[$value['fileIndex']]->getClientExtension()), $file[$value['fileIndex']]);
+        //                 throw new \RuntimeException('Ekstensi tidak valid');
+        //             }
+        //             $namaBaru = $file[$value['fileIndex']]->getRandomName();
+        //             $file[$value['fileIndex']]->move(FCPATH  . 'uploads/' . $value['type'], $namaBaru);
+        //             unset($value['fileIndex']);
+        //             $value['src'] = $namaBaru;
+        //         }
+        //         $post[$name][$key] = $value;
+        //     }
+        //     $soalBuilder[$name] = json_decode($soalBuilder[$name], true);
+        //     foreach ($soalBuilder[$name] as $block) {
+        //         if ($block['type'] == 'image' || $block['type'] == 'audio') {
+        //             $filePath = FCPATH . 'uploads/' . $block['type'] . '/' . $block['src'];
+        //             if (file_exists($filePath)) {
+        //                 unlink($filePath);
+        //             }
+        //         }
+        //     }
+
+        //     $post[$name] = json_encode($post[$name]);
+        // }
         $data = [
-            'pertanyaan' => $post['pertanyaan'],
-            'opsi_a' => $post['opsi_a'],
-            'opsi_b' => $post['opsi_b'],
-            'opsi_c' => $post['opsi_c'],
-            'opsi_d' => $post['opsi_d'],
-            'opsi_e' => $post['opsi_e'],
-            'pembahasan' => $post['pembahasan'],
+            'pertanyaan' => json_encode($post['pertanyaan']),
         ];
         $soalBuilder = $soalModel->update($id_soal, $data);
+        dd($post, $file, $image_array_src, $image_db_array_src, $trash_file, $soalBuilder);
         dd($post, $file, function_exists('imagewebp'));
     }
 }

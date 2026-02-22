@@ -89,6 +89,10 @@ $routes->post('/forgot-password', 'ResetPassword::userReset');
 $routes->get('/forgot-password/result', 'ResetPassword::result');
 $routes->get('/reset-password', 'ResetPassword::resetPassword');
 $routes->post('/reset-password', 'ResetPassword::updatePassword');
+
+//file acces routes
+$routes->get('file/(:segment)/(:any)', 'FileController::serve/$1/$2', ['filter' => 'auth']);
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

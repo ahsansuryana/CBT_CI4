@@ -78,7 +78,7 @@
                 <form action="<?= base_url('admin/dashboard/banksoal/soal/' . $id_soal) ?>" method="POST" enctype="multipart/form-data">
                     <div class="mb-2">
                         <span class="badge bg-primary mb-2">nomor <span id="currentQuestion"><?= esc($soal['nomor']) ?></span></span>
-                        <?= $soal['pertanyaan'] ?>
+                        <?= $soal['pertanyaan'] ?? '<div id="pertanyaan"></div>' ?>
                         <div class="border col-12 rounded rounded-top-0 p-2">
                             <button type="button" class="btn btn-secondary" onclick="addText(this.parentElement.previousElementSibling,'pertanyaan')"><i class="bi bi-fonts"></i> add text</button>
                             <button type="button" class="btn btn-secondary" onclick="addImage(this.parentElement.previousElementSibling,'pertanyaan')"><i class="bi bi-card-image"></i> add gambar</button>
@@ -316,7 +316,7 @@
                                 <input type="hidden" name="${nameInput}[]" value='${escapedJson}'>
                             </div>
                             <div class="input-group rounded-0">
-                                <input class="form-control rounded-0" type="file" name="${nameInput}[${uniqueId}]" accept="audio/*" onchange="if(this.files[0]) this.parentElement.previousElementSibling.children[0].src = window.URL.createObjectURL(this.files[0])">
+                                <input class="form-control rounded-0" type="file" name="${uniqueId}" accept="audio/*" onchange="if(this.files[0]) this.parentElement.previousElementSibling.children[0].src = window.URL.createObjectURL(this.files[0])">
                                 <button type="button" class="input-group-text btn btn-danger rounded-0" onclick="this.parentElement.previousElementSibling.remove();this.parentElement.remove()">
                                     <i class="bi bi-trash"></i>
                                 </button>

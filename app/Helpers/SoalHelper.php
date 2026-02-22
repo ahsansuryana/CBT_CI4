@@ -22,7 +22,7 @@ class SoalHelper
             return '';
         }
 
-        $html = '';
+        $html = '<div id="pertanyaan">';
         foreach ($items as $item) {
             // Jika item adalah string (text biasa)
             // $item = json_decode($item, true);
@@ -45,8 +45,8 @@ class SoalHelper
                 $item['fileIndex'] = $uniqueId;
                 $html .= sprintf(
                     '<div class="border">
-                <div class="border d-inline-block resizable-img">
-                    <img class="img-fluid" width="%d" height="%d" src="%s" />
+                <div class="border d-inline-block resizable-img" style="width : %dpx ; height : %dpx;">
+                    <img class="img-fluid"  src="%s" />
                 </div>
                 <input type="hidden" name="%s[]" value=\'%s\'>
             </div>
@@ -60,10 +60,36 @@ class SoalHelper
             </div>',
                     $item['width'],
                     $item['height'],
-                    base_url('uploads/' . $item['type'] . '/' . $item['src']),
+                    base_url('file/' . $item['type'] . '/' . $item['src']),
                     $fieldName,
                     json_encode($item),
                     $uniqueId
+                );
+                // dd($html);
+                continue;
+            }
+            if ($item['type'] == 'audio') {
+                // dd($item);
+                $uniqueId = round(microtime(true) * 1000) . '_' . substr(bin2hex(random_bytes(5)), 0, 9);
+                $item['fileIndex'] = $uniqueId;
+                $html .= sprintf(
+                    '<div class="border p-2">
+                                <audio controls class="w-100" style="max-height: 54px;">
+                                    <source src="%s" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                                <input type="hidden" name="%s[]" value=\'%s\'>
+                            </div>
+                            <div class="input-group rounded-0">
+                                <input class="form-control rounded-0" type="file" name="%s" accept="audio/*" onchange="if(this.files[0]) this.parentElement.previousElementSibling.children[0].src = window.URL.createObjectURL(this.files[0])">
+                                <button type="button" class="input-group-text btn btn-danger rounded-0" onclick="this.parentElement.previousElementSibling.remove();this.parentElement.remove()">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>',
+                    base_url('file/' . $item['type'] . '/' . $item['src']),
+                    $fieldName,
+                    json_encode($item),
+                    $uniqueId,
                 );
                 // dd($html);
                 continue;
@@ -80,7 +106,7 @@ class SoalHelper
                 }
             }
         }
-
+        $html .= '</div>';
         return $html;
     }
 
