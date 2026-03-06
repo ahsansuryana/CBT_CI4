@@ -54,7 +54,7 @@ class CreateSiswaJawabanTable extends Migration
         ]);
 
         $this->forge->addKey('id_siswaJawaban', true);
-        $this->forge->addForeignKey('pesertaUjian_id', 'siswa_ujian', 'id_siswaUjian', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('siswaUjian_id', 'siswa_ujian', 'id_siswaUjian', 'CASCADE', 'CASCADE');
         $this->forge->createTable('siswa_jawaban');
     }
 

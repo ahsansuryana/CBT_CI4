@@ -35,7 +35,7 @@
                             type="text"
                             class="form-control"
                             id="namaBank"
-                            name="nama_bank" value="<?= esc($banksoal['nama_bank']) ?>" required />
+                            name="nama_bank" value="<?= esc($banksoal['nama_bank'] ?? "") ?>" required />
                     </div>
                     <div class="mb-3">
                         <label for="validationCustom05" class="form-label">Mata Pelajaran</label>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="validationCustom04" class="form-label">Deskripsi</label>
-                        <textarea class="form-control" name="deskripsi" rows="3"><?= esc($banksoal['deskripsi']) ?></textarea>
+                        <textarea class="form-control" name="deskripsi" rows="3"><?= esc($banksoal['deskripsi'] ?? "") ?></textarea>
 
                     </div>
                 </div>

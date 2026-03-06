@@ -131,6 +131,50 @@
    solusi cepat (jika aman) adalah menonaktifkan overflow pada parent:
    .some-parent { overflow: visible; } */
 </style> -->
+<style>
+    .option-wrapper {
+        display: block;
+        width: 100%;
+    }
+
+    .option-card {
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 2px solid #dee2e6;
+        display: block;
+        width: 100%;
+    }
+
+    .option-card:hover {
+        background-color: #f8f9fa;
+        border-color: #0d6efd;
+    }
+
+    /* Style when radio is checked - using CSS only */
+    .option-radio:checked+.option-card {
+        background-color: #cfe2ff;
+        border-color: #0d6efd;
+        border-width: 3px;
+    }
+
+    .option-label {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #0d6efd;
+        color: white;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    /* Style label when radio is checked */
+    .option-radio:checked+.option-card .option-label {
+        background-color: #0b5ed7;
+    }
+</style>
 <link rel="stylesheet" type="text/css" href="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.css">
 <?= $this->endSection('head') ?>
 
@@ -145,7 +189,8 @@
                 ?>
                     <div class="mb-2">
                         <div>
-                            <p><?= $s->nomor ?> . <span class="<?= $s->id_soal ?>"><?= $s->pertanyaan ?></span>
+                            <p><?= $s->nomor ?> .
+                            <div class="<?= $s->id_soal ?>"><?= $s->pertanyaan ?></div>
                             </p>
                         </div>
                         <div class="row mb-2">
@@ -156,28 +201,28 @@
                         <div class="row" id="jawaban_pg<?= $s->id_soal ?>">
                             <div class="col-12">
                                 <button class="mb-2 btn btn-primary text-start w-100">
-                                    A. <span class="<?= $s->id_soal ?>"> <?= $s->opsi_a ?></span>
+                                    A. <div class="<?= $s->id_soal ?>"> <?= $s->opsi_a ?></div>
                                 </button>
                             </div>
                             <div class="col-12">
 
                                 <button class="mb-2 btn btn-primary text-start w-100">
-                                    B. <span class="<?= $s->id_soal ?>"><?= $s->opsi_b ?></span>
+                                    B. <div class="<?= $s->id_soal ?>"><?= $s->opsi_b ?></div>
                                 </button>
                             </div>
                             <div class="col-12">
                                 <button class="mb-2 btn btn-primary text-start w-100">
-                                    C. <span class="<?= $s->id_soal ?>"> <?= $s->opsi_c ?></span>
+                                    C. <div class="<?= $s->id_soal ?>"> <?= $s->opsi_c ?></div>
                                 </button>
                             </div>
                             <div class="col-12">
                                 <button class="mb-2 btn btn-primary text-start w-100">
-                                    D. <span class="<?= $s->id_soal ?>"> <?= $s->opsi_d ?></span>
+                                    D. <div class="<?= $s->id_soal ?>"> <?= $s->opsi_d ?></div>
                                 </button>
                             </div>
                             <div class="col-12">
                                 <button class="mb-2 btn btn-primary text-start w-100">
-                                    E. <span class="<?= $s->id_soal ?>"> <?= $s->opsi_e ?></span>
+                                    E. <div class="<?= $s->id_soal ?>"> <?= $s->opsi_e ?></div>
                                 </button>
                             </div>
                         </div>
@@ -203,16 +248,12 @@
                         </div>
                         <div class="row mb" id="pembahasan<?= $s->id_soal ?>">
                             <div class="col-12">
-                                Pembahasan : <p class="<?= $s->id_soal ?>"><?= $s->pembahasan ?></p>
+                                Pembahasan : <div class="<?= $s->id_soal ?>"><?= $s->pembahasan ?></div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-3 pe-0">
-                                <button id="edit" class="btn btn-primary col-12" onclick="edit(<?= $s->id_soal ?>)" type="button">Edit</button>
-
-                            </div>
-                            <div class="col-3 pe-0">
-                                <button id="save" class="btn btn-primary col-12" onclick="save(<?= $s->id_soal ?>)" type="button">Save</button>
+                                <a id="edit" class="btn btn-primary col-12" href="<?= base_url('admin/dashboard/banksoal/soal/' . $s->id_soal) ?>">Edit</a>
 
                             </div>
 
@@ -225,7 +266,103 @@
                     </div>
                 </div>
             </div>
-
+            <?php
+            // dd($soal);
+            foreach ($soal as $s) : ?>
+                <div class="card card-primary card-outline mb-4 p-4 " id="bank_soal_container">
+                    <div class="mb-2">
+                        <span class="badge bg-primary mb-2">nomor <span id="currentQuestion"><?= esc($s->nomor) ?></span></span>
+                        <?= $s->pertanyaan ?? '<div id="pertanyaan"></div>' ?>
+                        <div class="row mb-2">
+                            <div class="col">
+                                Jenis soal : <span id="jenis_soal<?= $s->jenis_soal ?>"><?= strtoupper($s->jenis_soal) ?></span>
+                            </div>
+                        </div>
+                        <div class="row" id="jawaban_pg">
+                            <div class="option-wrapper">
+                                <div class="option-card mb-3 p-3 rounded" for="option_B">
+                                    <div class="d-flex align-items-center">
+                                        <div class="option-label me-3">A</div>
+                                        <div class="option-text fs-5 flex-grow-1">
+                                            <?= $s->opsi_a ?? '<div id="opsi_a"></div>' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="option-wrapper">
+                                <div class="option-card mb-3 p-3 rounded" for="option_B">
+                                    <div class="d-flex align-items-center">
+                                        <div class="option-label me-3">B</div>
+                                        <div class="option-text fs-5 flex-grow-1">
+                                            <?= $s->opsi_b ?? '<div id="opsi_b"></div>' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="option-wrapper">
+                                <div class="option-card mb-3 p-3 rounded" for="option_B">
+                                    <div class="d-flex align-items-center">
+                                        <div class="option-label me-3">C</div>
+                                        <div class="option-text fs-5 flex-grow-1">
+                                            <?= $s->opsi_c ?? '<div id="opsi_c"></div>' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="option-wrapper">
+                                <div class="option-card mb-3 p-3 rounded" for="option_B">
+                                    <div class="d-flex align-items-center">
+                                        <div class="option-label me-3">D</div>
+                                        <div class="option-text fs-5 flex-grow-1">
+                                            <?= $s->opsi_d ?? '<div id="opsi_d"></div>' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="option-wrapper">
+                                <div class="option-card mb-3 p-3 rounded" for="option_B">
+                                    <div class="d-flex align-items-center">
+                                        <div class="option-label me-3">E</div>
+                                        <div class="option-text fs-5 flex-grow-1">
+                                            <?= $s->opsi_e ?? '<div id="opsi_e"></div>' ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="jawaban_essay" style="display: none;">
+                            <div class="col-12">
+                                <textarea class="form-control " rows="4" placeholder="Jawaban Essay"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="bobot">Bobot : <span class="bobot"><?= $s->bobot ?></span></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="sulit">Tingkat Kesulitan : <span class="sulit"><?= $s->tingkat_kesulitan ?></span></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                Kunci Jawaban: <span id="kunci_jawaban"><?= $s->jawaban_benar ?></span>
+                            </div>
+                        </div>
+                        <div class="row mb-2" id="pembahasan">
+                            <div class="col-12">
+                                <?= $s->pembahasan ?? '<div id="pembahasan"></div>' ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button id="save" class="btn btn-primary col-12" type="submit" type="button">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
     <!--begin::Container-->
