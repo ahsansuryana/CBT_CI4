@@ -10,6 +10,7 @@ use App\Models\SiswaUjianModel;
 use App\Models\SoalModel;
 use Hermawan\DataTables\DataTable;
 use App\Models\UjianModel;
+use App\Helpers\SoalHelper;
 use DateTime;
 
 
@@ -105,6 +106,7 @@ class Ujian extends BaseController
     // user controller
     public function user_index()
     {
+        // dd("hello");
         return view('user_ujian');
     }
 
@@ -179,7 +181,7 @@ class Ujian extends BaseController
     {
         $id_peserta = session()->get('id_peserta');
         $ujianModel = new UjianModel();
-        $ujianBuilder = $ujianModel->select("*,COUNT(m_soal.id_soal) AS jumlah_soal")->where('siswa_ujian.id_siswaUjian', $id)
+        $ujianBuilder = $ujianModel->select("m_ujian.*,m_mapel.nama_mapel,siswa_ujian.id_siswaUjian,COUNT(m_soal.id_soal) AS jumlah_soal")->where('siswa_ujian.id_siswaUjian', $id)
             ->join('siswa_ujian', 'siswa_ujian.ujian_id = m_ujian.id_ujian', 'left')
             ->join('m_mapel', 'm_mapel.id_mapel = m_ujian.mapel_id')
             ->join('m_banksoal', 'm_banksoal.bank_id = m_ujian.banksoal_id')
@@ -210,6 +212,7 @@ class Ujian extends BaseController
             ->where('m_soal.nomor', $current_soal)
             ->where('siswa_ujian.id_siswaUjian', $id_siswaUjian)
             ->where('m_peserta.id_peserta', $id_peserta)->first();
+
         if ($siswaUjianBuilder['mulai_ujian'] == null) {
             $now = date('Y-m-d H:i:s');
             $siswaUjianModel->update($id_siswaUjian, ['mulai_ujian' => $now]);
@@ -269,7 +272,11 @@ class Ujian extends BaseController
         // dd($siswaUjianBuilder);
         $siswaUjianBuilder['id_siswaUjian'] = $id_siswaUjian;
         $siswaUjianBuilder['sisa_detik'] =  $sisa_detik;
+        $indexName = ['pertanyaan', 'opsi_a', 'opsi_b', 'opsi_c', 'opsi_d', 'opsi_e', 'pembahasan'];
 
+        foreach ($indexName as $name) {
+            $siswaUjianBuilder[$name] = SoalHelper::parseJsonToHtmlView($siswaUjianBuilder[$name], $name);
+        }
         // dd($siswaUjianBuilder);
         return view('main_ujian', $siswaUjianBuilder);
     }

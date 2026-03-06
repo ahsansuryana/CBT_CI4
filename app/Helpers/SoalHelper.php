@@ -167,6 +167,83 @@ class SoalHelper
     }
 
     /**
+     * Parse JSON content dari database menjadi HTML (View Only / Read-only)
+     * 
+     * @param string $jsonContent - JSON string dari database
+     * @return string HTML output
+     */
+    public static function parseJsonToHtmlView($jsonContent)
+    {
+        if (empty($jsonContent)) {
+            return '';
+        }
+
+        // Decode JSON
+        $items = json_decode($jsonContent, true);
+
+        if (!is_array($items)) {
+            return '';
+        }
+
+        $html = '<div class="soal-content">';
+
+        foreach ($items as $item) {
+            if (!is_array($item) || !isset($item['type'])) {
+                continue;
+            }
+
+            switch ($item['type']) {
+                case 'text':
+                    $html .= sprintf(
+                        '<div class="soal-text mb-2">%s</div>',
+                        nl2br(esc($item['value'] ?? ''))
+                    );
+                    break;
+
+                case 'image':
+                    $width  = $item['width']  ?? 200;
+                    $height = $item['height'] ?? 200;
+                    $src    = $item['src']    ?? '';
+
+                    if (!empty($src)) {
+                        $html .= sprintf(
+                            '<div class="soal-image mb-2">
+                            <img src="%s"
+                                 style="width:%dpx; height:%dpx; object-fit:contain;"
+                                 class="img-fluid"
+                                 alt="Gambar Soal">
+                        </div>',
+                            esc(base_url('file/image/' . $src)),
+                            (int) $width,
+                            (int) $height
+                        );
+                    }
+                    break;
+
+                case 'audio':
+                    $src = $item['src'] ?? '';
+
+                    if (!empty($src)) {
+                        $html .= sprintf(
+                            '<div class="soal-audio mb-2 p-2">
+                            <audio controls class="w-100" style="max-height:54px;">
+                                <source src="%s" type="audio/mpeg">
+                                Browser Anda tidak mendukung pemutar audio.
+                            </audio>
+                        </div>',
+                            esc(base_url('file/audio/' . $src))
+                        );
+                    }
+                    break;
+            }
+        }
+
+        $html .= '</div>';
+
+        return $html;
+    }
+
+    /**
      * Parse pertanyaan (untuk compatibility)
      */
     public static function parsePertanyaan($jsonContent)

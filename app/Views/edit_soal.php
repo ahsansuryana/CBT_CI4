@@ -95,7 +95,7 @@
                                     <div class="d-flex align-items-center">
                                         <div class="option-label me-3">A</div>
                                         <div class="option-text fs-5 flex-grow-1">
-                                            <div id="pertanyaan"></div>
+                                            <?= $soal['opsi_a'] ?? '<div id="opsi_a"></div>' ?>
                                             <div class="border col-12 rounded rounded-top-0 p-2">
                                                 <button type="button" class="btn btn-secondary" onclick="addText(this.parentElement.previousElementSibling,'opsi_a')"><i class="bi bi-fonts"></i> add text</button>
                                                 <button type="button" class="btn btn-secondary" onclick="addImage(this.parentElement.previousElementSibling,'opsi_a')"><i class="bi bi-card-image"></i> add gambar</button>
@@ -110,7 +110,7 @@
                                     <div class="d-flex align-items-center">
                                         <div class="option-label me-3">B</div>
                                         <div class="option-text fs-5 flex-grow-1">
-                                            <div id="pertanyaan"></div>
+                                            <?= $soal['opsi_b'] ?? '<div id="opsi_b"></div>' ?>
                                             <div class="border col-12 rounded rounded-top-0 p-2">
                                                 <button type="button" class="btn btn-secondary" onclick="addText(this.parentElement.previousElementSibling,'opsi_b')"><i class="bi bi-fonts"></i> add text</button>
                                                 <button type="button" class="btn btn-secondary" onclick="addImage(this.parentElement.previousElementSibling,'opsi_b')"><i class="bi bi-card-image"></i> add gambar</button>
@@ -125,7 +125,7 @@
                                     <div class="d-flex align-items-center">
                                         <div class="option-label me-3">C</div>
                                         <div class="option-text fs-5 flex-grow-1">
-                                            <div id="pertanyaan"></div>
+                                            <?= $soal['opsi_c'] ?? '<div id="opsi_c"></div>' ?>
                                             <div class="border col-12 rounded rounded-top-0 p-2">
                                                 <button type="button" class="btn btn-secondary" onclick="addText(this.parentElement.previousElementSibling,'opsi_c')"><i class="bi bi-fonts"></i> add text</button>
                                                 <button type="button" class="btn btn-secondary" onclick="addImage(this.parentElement.previousElementSibling,'opsi_c')"><i class="bi bi-card-image"></i> add gambar</button>
@@ -140,7 +140,7 @@
                                     <div class="d-flex align-items-center">
                                         <div class="option-label me-3">D</div>
                                         <div class="option-text fs-5 flex-grow-1">
-                                            <div id="pertanyaan"></div>
+                                            <?= $soal['opsi_d'] ?? '<div id="opsi_d"></div>' ?>
                                             <div class="border col-12 rounded rounded-top-0 p-2">
                                                 <button type="button" class="btn btn-secondary" onclick="addText(this.parentElement.previousElementSibling,'opsi_d')"><i class="bi bi-fonts"></i> add text</button>
                                                 <button type="button" class="btn btn-secondary" onclick="addImage(this.parentElement.previousElementSibling,'opsi_d')"><i class="bi bi-card-image"></i> add gambar</button>
@@ -155,7 +155,7 @@
                                     <div class="d-flex align-items-center">
                                         <div class="option-label me-3">E</div>
                                         <div class="option-text fs-5 flex-grow-1">
-                                            <div id="pertanyaan"></div>
+                                            <?= $soal['opsi_e'] ?? '<div id="opsi_e"></div>' ?>
                                             <div class="border col-12 rounded rounded-top-0 p-2">
                                                 <button type="button" class="btn btn-secondary" onclick="addText(this.parentElement.previousElementSibling,'opsi_e')"><i class="bi bi-fonts"></i> add text</button>
                                                 <button type="button" class="btn btn-secondary" onclick="addImage(this.parentElement.previousElementSibling,'opsi_e')"><i class="bi bi-card-image"></i> add gambar</button>
@@ -188,12 +188,7 @@
                         </div>
                         <div class="row mb-2" id="pembahasan">
                             <div class="col-12">
-                                <div id="pertanyaan">
-                                    <div class="position-relative">
-                                        <textarea class="form-control rounded-bottom-0"
-                                            oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'" name="pembahasan[]"><?= esc($soal['pertanyaan']) ?></textarea>
-                                    </div>
-                                </div>
+                                <?= $soal['pembahasan'] ?? '<div id="pembahasan"></div>' ?>
                                 <div class="border col-12 rounded rounded-top-0 p-2">
                                     <button type="button" class="btn btn-secondary" onclick="addText(this.parentElement.previousElementSibling,'pembahasan')"><i class="bi bi-fonts"></i> add text</button>
                                     <button type="button" class="btn btn-secondary" onclick="addImage(this.parentElement.previousElementSibling,'pembahasan')"><i class="bi bi-card-image"></i> add gambar</button>
