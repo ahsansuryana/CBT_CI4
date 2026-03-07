@@ -173,17 +173,40 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <div class="bobot">Bobot : <span class="bobot"><?= $soal['bobot'] ?></span></div>
+                                <div class="bobot">
+                                    Bobot :
+                                    <input
+                                        type="number"
+                                        name="bobot"
+                                        class="form-control"
+                                        value="<?= $soal['bobot'] ?>"
+                                        step="0.1"
+                                        min="0">
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <div class="sulit">Tingkat Kesulitan : <span class="sulit"><?= $soal['tingkat_kesulitan'] ?></span></div>
+                                <div class="sulit">
+                                    Tingkat Kesulitan :
+                                    <select name="tingkat_kesulitan" class="form-control">
+                                        <option value="mudah" <?= $soal['tingkat_kesulitan'] == 'mudah'  ? 'selected' : '' ?>>Mudah</option>
+                                        <option value="sedang" <?= $soal['tingkat_kesulitan'] == 'sedang' ? 'selected' : '' ?>>Sedang</option>
+                                        <option value="sulit" <?= $soal['tingkat_kesulitan'] == 'sulit'  ? 'selected' : '' ?>>Sulit</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col">
-                                Kunci Jawaban: <span id="kunci_jawaban"><?= $soal['jawaban_benar'] ?></span>
+                                Kunci Jawaban:
+                                <select name="jawaban_benar" id="kunci_jawaban" class="form-control">
+                                    <?php foreach (['A', 'B', 'C', 'D', 'E'] as $opt): ?>
+                                        <option value="<?= $opt ?>" <?= $soal['jawaban_benar'] == $opt ? 'selected' : '' ?>>
+                                            <?= $opt ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-2" id="pembahasan">
