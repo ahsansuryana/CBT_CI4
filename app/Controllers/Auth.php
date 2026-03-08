@@ -179,7 +179,7 @@ class Auth extends BaseController
         $userModel = new User();
         // Simpan user baru ke database
         $userData = [
-            'role_id' => 3, // Default role sebagai Santri
+            'role_id' => 2, // Default role sebagai Santri
             'username' => $username,
             'email' => $email,
             'password' => password_hash($password, PASSWORD_DEFAULT),

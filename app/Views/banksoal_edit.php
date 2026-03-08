@@ -4,133 +4,6 @@
   -->
 <!-- Summernote (versi BS5) -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.css" rel="stylesheet">
-<!-- <style>
-    /* --- Dasar .btn ala Bootstrap 3.4.1 (ringkasan) --- */
-    .btn {
-        display: inline-block;
-        padding: 6px 12px;
-        margin-bottom: 0;
-        font-size: 14px;
-        line-height: 1.42857143;
-        color: #333;
-        text-align: center;
-        vertical-align: middle;
-        cursor: pointer;
-        background-image: none;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        white-space: nowrap;
-        user-select: none;
-    }
-
-    /* Hover */
-    .btn:hover,
-    .btn:focus {
-        color: #333;
-        background-color: #e6e6e6;
-        border-color: #adadad;
-        text-decoration: none;
-    }
-
-    /* Fokus (accessibility) */
-    .btn:focus {
-        outline: thin dotted;
-        outline: 5px auto -webkit-focus-ring-color;
-        outline-offset: -2px;
-    }
-
-    /* Disabled */
-    .btn.disabled,
-    .btn[disabled],
-    fieldset[disabled] .btn {
-        cursor: not-allowed;
-        opacity: 0.65;
-        pointer-events: none;
-    }
-
-    /* --- Keadaan "pressed" / aktif (dipencet) --- */
-    /* ini meniru efek inset shadow dan warna yang sedikit lebih gelap */
-    .btn:active,
-    .btn.active,
-    .open>.dropdown-toggle.btn {
-        background-image: none;
-        outline: 0;
-        -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
-        box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
-        transform: translateY(1px);
-        /* efek sedikit turun saat ditekan */
-    }
-
-    /* Pastikan tombol yang aktif tidak show outline lagi */
-    .btn:active:focus,
-    .btn.active:focus {
-        outline: 0;
-        box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
-    }
-
-    /* --- Varian populer: default & primary --- */
-    /* btn-default (putih/abu) */
-    .btn-default {
-        color: #333;
-        background-color: #fff;
-        border-color: #ccc;
-    }
-
-    .btn-default:hover {
-        background-color: #e6e6e6;
-        border-color: #adadad;
-    }
-
-    .btn-default:active,
-    .btn-default.active,
-    .open>.dropdown-toggle.btn-default {
-        color: #333;
-        background-color: #e6e6e6;
-        border-color: #adadad;
-        box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
-    }
-
-    /* btn-primary (biru) */
-    .btn-primary {
-        color: #fff;
-        background-color: #337ab7;
-        border-color: #2e6da4;
-    }
-
-    .btn-primary:hover {
-        background-color: #286090;
-        border-color: #204d74;
-    }
-
-    .btn-primary:active,
-    .btn-primary.active,
-    .open>.dropdown-toggle.btn-primary {
-        color: #fff;
-        background-color: #286090;
-        border-color: #204d74;
-        box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
-    }
-
-    /* small visual helper untuk btn-group saat ditekan */
-    .btn-group>.btn:active,
-    .btn-group-vertical>.btn:active {
-        position: relative;
-        z-index: 2;
-    }
-
-    /* Jika kamu mengalami dropdown toolbar (seperti summernote) tertutup:
-   atur z-index editor / dropdown agar muncul di atas container yang punya overflow */
-    .note-editor,
-    .dropdown.open>.dropdown-menu,
-    .note-editor .dropdown-menu {
-        z-index: 2000 !important;
-    }
-
-    /* Jika container punya overflow:hidden atau transform yang mengganggu,
-   solusi cepat (jika aman) adalah menonaktifkan overflow pada parent:
-   .some-parent { overflow: visible; } */
-</style> -->
 <style>
     .option-wrapper {
         display: block;
@@ -182,187 +55,113 @@
 <div class="app-content">
     <div class="row g-4">
         <div class="col-12">
-            <div class="card card-primary card-outline mb-4 p-4 " id="bank_soal_container">
+            <div class="card card-primary card-outline mb-4 p-4 ">
+                <div class="row">
+                    <button class="btn btn-primary col-12" id="add_button" onclick="add()">Tambah + </button>
+                </div>
+            </div>
+            <div id="bank_soal_container">
                 <?php
                 // dd($soal);
-                foreach ($soal as $s) :
-                ?>
-                    <div class="mb-2">
-                        <div>
-                            <p><?= $s->nomor ?> .
-                            <div class="<?= $s->id_soal ?>"><?= $s->pertanyaan ?></div>
-                            </p>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col">
-                                Jenis soal : <span id="jenis_soal<?= $s->id_soal ?>"><?= strtoupper($s->jenis_soal) ?></span>
+                foreach ($soal as $s) : ?>
+                    <div class="card card-primary card-outline mb-4 p-4 ">
+                        <div class="mb-2">
+                            <span class="badge bg-primary mb-2">nomor <span id="currentQuestion"><?= esc($s->nomor) ?></span></span>
+                            <?= $s->pertanyaan ?? '<div id="pertanyaan"></div>' ?>
+                            <div class="row mb-2">
+                                <div class="col">
+                                    Jenis soal : <span id="jenis_soal<?= $s->jenis_soal ?>"><?= strtoupper($s->jenis_soal) ?></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row" id="jawaban_pg<?= $s->id_soal ?>">
-                            <div class="col-12">
-                                <button class="mb-2 btn btn-primary text-start w-100">
-                                    A. <div class="<?= $s->id_soal ?>"> <?= $s->opsi_a ?></div>
-                                </button>
+                            <div class="row" id="jawaban_pg">
+                                <div class="option-wrapper">
+                                    <div class="option-card mb-3 p-3 rounded" for="option_B">
+                                        <div class="d-flex align-items-center">
+                                            <div class="option-label me-3">A</div>
+                                            <div class="option-text fs-5 flex-grow-1">
+                                                <?= $s->opsi_a ?? '<div id="opsi_a"></div>' ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-wrapper">
+                                    <div class="option-card mb-3 p-3 rounded" for="option_B">
+                                        <div class="d-flex align-items-center">
+                                            <div class="option-label me-3">B</div>
+                                            <div class="option-text fs-5 flex-grow-1">
+                                                <?= $s->opsi_b ?? '<div id="opsi_b"></div>' ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-wrapper">
+                                    <div class="option-card mb-3 p-3 rounded" for="option_B">
+                                        <div class="d-flex align-items-center">
+                                            <div class="option-label me-3">C</div>
+                                            <div class="option-text fs-5 flex-grow-1">
+                                                <?= $s->opsi_c ?? '<div id="opsi_c"></div>' ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-wrapper">
+                                    <div class="option-card mb-3 p-3 rounded" for="option_B">
+                                        <div class="d-flex align-items-center">
+                                            <div class="option-label me-3">D</div>
+                                            <div class="option-text fs-5 flex-grow-1">
+                                                <?= $s->opsi_d ?? '<div id="opsi_d"></div>' ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-wrapper">
+                                    <div class="option-card mb-3 p-3 rounded" for="option_B">
+                                        <div class="d-flex align-items-center">
+                                            <div class="option-label me-3">E</div>
+                                            <div class="option-text fs-5 flex-grow-1">
+                                                <?= $s->opsi_e ?? '<div id="opsi_e"></div>' ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-12">
-
-                                <button class="mb-2 btn btn-primary text-start w-100">
-                                    B. <div class="<?= $s->id_soal ?>"><?= $s->opsi_b ?></div>
-                                </button>
+                            <div class="row" id="jawaban_essay" style="display: none;">
+                                <div class="col-12">
+                                    <textarea class="form-control " rows="4" placeholder="Jawaban Essay"></textarea>
+                                </div>
                             </div>
-                            <div class="col-12">
-                                <button class="mb-2 btn btn-primary text-start w-100">
-                                    C. <div class="<?= $s->id_soal ?>"> <?= $s->opsi_c ?></div>
-                                </button>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="bobot">Bobot : <span class="bobot"><?= $s->bobot ?></span></div>
+                                </div>
                             </div>
-                            <div class="col-12">
-                                <button class="mb-2 btn btn-primary text-start w-100">
-                                    D. <div class="<?= $s->id_soal ?>"> <?= $s->opsi_d ?></div>
-                                </button>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="sulit">Tingkat Kesulitan : <span class="sulit"><?= $s->tingkat_kesulitan ?></span></div>
+                                </div>
                             </div>
-                            <div class="col-12">
-                                <button class="mb-2 btn btn-primary text-start w-100">
-                                    E. <div class="<?= $s->id_soal ?>"> <?= $s->opsi_e ?></div>
-                                </button>
+                            <div class="row">
+                                <div class="col">
+                                    Kunci Jawaban: <span id="kunci_jawaban"><?= $s->jawaban_benar ?></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row" id="jawaban_essay<?= $s->id_soal ?>" style="display: none;">
-                            <div class="col-12">
-                                <textarea class="form-control <?= $s->id_soal ?>" rows="4" placeholder="Jawaban Essay"></textarea>
+                            <div class="row mb-2" id="pembahasan">
+                                <div class="col-12">
+                                    <?= $s->pembahasan ?? '<div id="pembahasan"></div>' ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="bobot">Bobot : <span class="bobot<?= $s->id_soal ?>"><?= $s->bobot ?></span></div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <a class="btn btn-primary col-12" type="submit" type="button" href="<?= base_url('admin/dashboard/banksoal/soal/' . $s->id_soal) ?>">Edit</a>
+                                </div>
+                                <div class="col-6">
+                                    <a class="btn btn-danger col-12" type="submit" type="button" href="<?= base_url('admin/dashboard/banksoal/soal/' . $s->id_soal) ?>">Hapus</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="sulit">Tingkat Kesulitan : <span class="sulit<?= $s->id_soal ?>"><?= $s->tingkat_kesulitan ?></span></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                Kunci Jawaban: <span id="kunci_jawaban<?= $s->id_soal ?>"><?= $s->jawaban_benar ?></span>
-                            </div>
-                        </div>
-                        <div class="row mb" id="pembahasan<?= $s->id_soal ?>">
-                            <div class="col-12">
-                                Pembahasan : <div class="<?= $s->id_soal ?>"><?= $s->pembahasan ?></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-3 pe-0">
-                                <a id="edit" class="btn btn-primary col-12" href="<?= base_url('admin/dashboard/banksoal/soal/' . $s->id_soal) ?>">Edit</a>
-
-                            </div>
-
                         </div>
                     </div>
                 <?php endforeach; ?>
-                <div class="row">
-                    <div class="col">
-                        <button class="btn btn-primary" id="add_button" onclick="add()">Tambah + </button>
-                    </div>
-                </div>
             </div>
-            <?php
-            // dd($soal);
-            foreach ($soal as $s) : ?>
-                <div class="card card-primary card-outline mb-4 p-4 " id="bank_soal_container">
-                    <div class="mb-2">
-                        <span class="badge bg-primary mb-2">nomor <span id="currentQuestion"><?= esc($s->nomor) ?></span></span>
-                        <?= $s->pertanyaan ?? '<div id="pertanyaan"></div>' ?>
-                        <div class="row mb-2">
-                            <div class="col">
-                                Jenis soal : <span id="jenis_soal<?= $s->jenis_soal ?>"><?= strtoupper($s->jenis_soal) ?></span>
-                            </div>
-                        </div>
-                        <div class="row" id="jawaban_pg">
-                            <div class="option-wrapper">
-                                <div class="option-card mb-3 p-3 rounded" for="option_B">
-                                    <div class="d-flex align-items-center">
-                                        <div class="option-label me-3">A</div>
-                                        <div class="option-text fs-5 flex-grow-1">
-                                            <?= $s->opsi_a ?? '<div id="opsi_a"></div>' ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="option-wrapper">
-                                <div class="option-card mb-3 p-3 rounded" for="option_B">
-                                    <div class="d-flex align-items-center">
-                                        <div class="option-label me-3">B</div>
-                                        <div class="option-text fs-5 flex-grow-1">
-                                            <?= $s->opsi_b ?? '<div id="opsi_b"></div>' ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="option-wrapper">
-                                <div class="option-card mb-3 p-3 rounded" for="option_B">
-                                    <div class="d-flex align-items-center">
-                                        <div class="option-label me-3">C</div>
-                                        <div class="option-text fs-5 flex-grow-1">
-                                            <?= $s->opsi_c ?? '<div id="opsi_c"></div>' ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="option-wrapper">
-                                <div class="option-card mb-3 p-3 rounded" for="option_B">
-                                    <div class="d-flex align-items-center">
-                                        <div class="option-label me-3">D</div>
-                                        <div class="option-text fs-5 flex-grow-1">
-                                            <?= $s->opsi_d ?? '<div id="opsi_d"></div>' ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="option-wrapper">
-                                <div class="option-card mb-3 p-3 rounded" for="option_B">
-                                    <div class="d-flex align-items-center">
-                                        <div class="option-label me-3">E</div>
-                                        <div class="option-text fs-5 flex-grow-1">
-                                            <?= $s->opsi_e ?? '<div id="opsi_e"></div>' ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row" id="jawaban_essay" style="display: none;">
-                            <div class="col-12">
-                                <textarea class="form-control " rows="4" placeholder="Jawaban Essay"></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="bobot">Bobot : <span class="bobot"><?= $s->bobot ?></span></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="sulit">Tingkat Kesulitan : <span class="sulit"><?= $s->tingkat_kesulitan ?></span></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                Kunci Jawaban: <span id="kunci_jawaban"><?= $s->jawaban_benar ?></span>
-                            </div>
-                        </div>
-                        <div class="row mb-2" id="pembahasan">
-                            <div class="col-12">
-                                <?= $s->pembahasan ?? '<div id="pembahasan"></div>' ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <button id="save" class="btn btn-primary col-12" type="submit" type="button">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
         </div>
     </div>
     <!--begin::Container-->
@@ -455,20 +254,20 @@
     };
     var add = function() {
         const container = $("#bank_soal_container")
-        const newSoalNumber = container.children().length;
+        const newSoalNumber = container.children().length + 1;
         $.ajax({
             url: '<?= base_url("admin/dashboard/banksoal/" . $bank_soal_id) ?>', // endpoint API
             method: 'POST', // bisa juga 'GET', 'PUT', 'DELETE', dll
             data: JSON.stringify({
                 id: null,
                 data: {
-                    pertanyaan: "Soal Baru",
-                    opsi_a: "Opsi A",
-                    opsi_b: "Opsi B",
-                    opsi_c: "Opsi C",
-                    opsi_d: "Opsi D",
-                    opsi_e: "Opsi E",
-                    pembahasan: "Pembahasan Soal Baru",
+                    pertanyaan: '[{"type":"text","value":""}]',
+                    opsi_a: '[{"type":"text","value":""}]',
+                    opsi_b: '[{"type":"text","value":""}]',
+                    opsi_c: '[{"type":"text","value":""}]',
+                    opsi_d: '[{"type":"text","value":""}]',
+                    opsi_e: '[{"type":"text","value":""}]',
+                    pembahasan: '[{"type":"text","value":""}]',
                     bobot: 1,
                     tingkat_kesulitan: "mudah",
                     jenis_soal: "PG",
@@ -485,11 +284,11 @@
                     text: "Soal baru berhasil ditambahkan.",
                     type: "success",
                     timer: 1000
-                })
-                setInterval(() => {
-                    location.reload();
-                }, 1000); // 1000 ms = 1 detik
-
+                });
+                setTimeout(function() {
+                    // jalankan sesuatu di sini
+                    window.location.reload(); // contoh
+                }, 1000); // samakan dengan nilai timer
             },
             error: function(xhr, status, error) {
                 console.error('Gagal:', error);

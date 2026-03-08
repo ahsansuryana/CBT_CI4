@@ -200,10 +200,10 @@ class Ujian extends BaseController
         if ($current_soal == null) {
             return redirect()->to('/ujian' . '/' . $id_siswaUjian . '?no=1');
         }
+
         $id_peserta = session()->get('id_peserta');
         $siswaUjianModel = new SiswaUjianModel();
         $siswaUjianBuilder = $siswaUjianModel
-            // ->select("m_ujian.acak_soal, siswa_ujian.kunci_acak, siswa_ujian.id_siswaUjian, m_banksoal.bank_id, m_soal.*, siswa_ujian.*")
             ->select('*')
             ->join('m_peserta', 'm_peserta.id_peserta = siswa_ujian.peserta_id')
             ->join('m_ujian', 'm_ujian.id_ujian = siswa_ujian.ujian_id')
@@ -212,50 +212,52 @@ class Ujian extends BaseController
             ->where('m_soal.nomor', $current_soal)
             ->where('siswa_ujian.id_siswaUjian', $id_siswaUjian)
             ->where('m_peserta.id_peserta', $id_peserta)->first();
-
+        // d($siswaUjianBuilder);
+        // ✅ Null check moved up — before any use of $siswaUjianBuilder
+        if ($siswaUjianBuilder == null) {
+            return redirect()->to('/ujian' . '/' . $id_siswaUjian);
+        }
+        //set mulai ujian jika belum ada
         if ($siswaUjianBuilder['mulai_ujian'] == null) {
             $now = date('Y-m-d H:i:s');
             $siswaUjianModel->update($id_siswaUjian, ['mulai_ujian' => $now]);
             $siswaUjianBuilder['mulai_ujian'] = $now;
         }
-        $start = strtotime($siswaUjianBuilder['mulai_ujian']); // ke detik
+        //cek durasi apakah masih berlangsung
+        $start = strtotime($siswaUjianBuilder['mulai_ujian']);
         $now   = time();
         $jarakDetik = $now - $start;
         $sisa_detik = (int)$siswaUjianBuilder['durasi'] * 60 - $jarakDetik;
+        // jika waktu habis maka force quit
         if ($jarakDetik > ((int)$siswaUjianBuilder['durasi']) * 60) {
             return redirect()->to('/ujian' . '/' . $id_siswaUjian . '/report');
         }
-        if ($siswaUjianBuilder == null) {
-            return redirect()->to('/ujian' . '/' . $id_siswaUjian);
-        }
+
         $soalModel = new SoalModel();
         $jumlah_soal = $soalModel->where('bank_soal_id', $siswaUjianBuilder['bank_id'])->countAllResults();
+        // d($jumlah_soal);
         if ($siswaUjianBuilder['acak_soal'] == 'Y' && $siswaUjianBuilder['kunci_acak'] == null) {
-            $ujianModel = new UjianModel();
-            $ujianBuilder = $ujianModel
-                ->select('COUNT(m_soal.id_soal) as jumlah_soal')
-                ->join('m_banksoal', 'm_banksoal.bank_id = m_ujian.banksoal_id')
-                ->join('m_soal', 'm_soal.bank_soal_id = m_banksoal.bank_id', 'left')
-                ->groupBy('m_ujian.id_ujian')->first();
-            $arrayRandom = range(1, $ujianBuilder['jumlah_soal']);
+            // dd($ujianBuilder);
+            $arrayRandom = range(1, $jumlah_soal);
             shuffle($arrayRandom);
-            $data = [
-                'kunci_acak' => json_encode($arrayRandom)
-            ];
+            $data = ['kunci_acak' => json_encode($arrayRandom)];
             $siswaUjianModel->update($siswaUjianBuilder['id_siswaUjian'], $data);
             $siswaUjianBuilder['kunci_acak'] = json_encode($arrayRandom);
         }
-        // mengambil soal
+
         if ($siswaUjianBuilder['acak_soal'] == 'Y') {
             $kunci_acak = json_decode($siswaUjianBuilder['kunci_acak']);
             $current_soal = $kunci_acak[$current_soal - 1];
             $siswaUjianBuilder = $soalModel->select("*")->where('bank_soal_id', $siswaUjianBuilder['bank_id'])->where('nomor', $current_soal)->first();
         }
+
         $siswaJawabanModel = new SiswaJawabanModel();
         $siswaJawabanBuilder = $siswaJawabanModel->select('*')->where('siswaUjian_id', $id_siswaUjian)->get()->getResultArray();
+
         $jawaban = array_fill(1, $jumlah_soal, null);
         $countTerjawab = 0;
         $countRagu = 0;
+
         foreach ($siswaJawabanBuilder as $jwb) {
             $jawaban[$jwb['nomor']] = $jwb;
             if ($jwb['ragu'] == 1) {
@@ -264,20 +266,21 @@ class Ujian extends BaseController
                 $countTerjawab++;
             }
         }
-        $siswaUjianBuilder['jawaban'] = $jawaban;
-        $siswaUjianBuilder['countTerjawab'] = $countTerjawab;
-        $siswaUjianBuilder['countRagu'] = $countRagu;
-        $siswaUjianBuilder['current_soal'] = $this->request->getGet('no');
-        $siswaUjianBuilder['jumlah_soal'] = $jumlah_soal;
-        // dd($siswaUjianBuilder);
-        $siswaUjianBuilder['id_siswaUjian'] = $id_siswaUjian;
-        $siswaUjianBuilder['sisa_detik'] =  $sisa_detik;
-        $indexName = ['pertanyaan', 'opsi_a', 'opsi_b', 'opsi_c', 'opsi_d', 'opsi_e', 'pembahasan'];
 
+        $siswaUjianBuilder['jawaban']        = $jawaban;
+        $siswaUjianBuilder['countTerjawab']  = $countTerjawab;
+        $siswaUjianBuilder['countRagu']      = $countRagu;
+        $siswaUjianBuilder['current_soal']   = $this->request->getGet('no');
+        $siswaUjianBuilder['jumlah_soal']    = $jumlah_soal;
+        // ✅ dd($siswaUjianBuilder) removed
+        $siswaUjianBuilder['id_siswaUjian']  = $id_siswaUjian;
+        $siswaUjianBuilder['sisa_detik']     = $sisa_detik;
+
+        $indexName = ['pertanyaan', 'opsi_a', 'opsi_b', 'opsi_c', 'opsi_d', 'opsi_e', 'pembahasan'];
         foreach ($indexName as $name) {
             $siswaUjianBuilder[$name] = SoalHelper::parseJsonToHtmlView($siswaUjianBuilder[$name], $name);
         }
-        // dd($siswaUjianBuilder);
+
         return view('main_ujian', $siswaUjianBuilder);
     }
     public function jawab_soal($id_siswaUjian)
@@ -331,7 +334,7 @@ class Ujian extends BaseController
     public function report($id_siswaUjian)
     {
         $siswaUjianModel = new SiswaUjianModel();
-        $siswaUjianBuilder = $siswaUjianModel->select("*, (
+        $siswaUjianBuilder = $siswaUjianModel->select("m_ujian.*,m_mapel.nama_mapel,siswa_ujian.id_siswaUjian,siswa_ujian.selesai_ujian,siswa_ujian.mulai_ujian, (
             SELECT COUNT(*)
             FROM m_soal
             WHERE m_soal.bank_soal_id = m_ujian.banksoal_id
@@ -376,7 +379,7 @@ class Ujian extends BaseController
 
         $siswaUjianBuilder['text_lama_pengerjaan'] = "{$jam}j {$menit}m";
         // dd($siswaUjianBuilder);
-
+        $countBenar = 0;
         if ($siswaUjianBuilder['tampil_nilai'] == 'Y') {
             $siswaJawabanModel = new SiswaJawabanModel();
             $siswaJawabanBuilder = $siswaJawabanModel->select()
@@ -396,7 +399,7 @@ class Ujian extends BaseController
             $siswaJawaban = [];
             $jawabanBenar = [];
             $data = [];
-            $countBenar = 0;
+
             foreach ($siswaJawabanBuilder as $jawaban) {
                 $siswaJawaban[$jawaban['nomor']] = $jawaban;
             }

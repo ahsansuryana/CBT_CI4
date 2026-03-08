@@ -164,7 +164,7 @@ class Banksoal extends BaseController
             // d($post[$name]);
             // upload seluruh file
             foreach ($post[$name] as $i => $block) {
-                d($block['type'] == 'image' || $block['type'] == 'audio');
+                // d($block['type'] == 'image' || $block['type'] == 'audio');
                 if ($block['type'] == 'image' || $block['type'] == 'audio') {
                     $fileUpload = $file[$block['fileIndex']];
                     $fileMimeType = $fileUpload->getMimeType();
@@ -294,9 +294,13 @@ class Banksoal extends BaseController
             // dd($post, $file, function_exists('imagewebp'));
             $data[$name] = json_encode($post[$name]);
         }
-
+        // dd($data);
+        $data['bobot'] = $post['bobot'];
+        $data["jawaban_benar"] = $post["jawaban_benar"];
+        $data["tingkat_kesulitan"] = $post['tingkat_kesulitan'];
         $soalBuilder = $soalModel->update($id_soal, $data);
-        dd($data);
-        return redirect()->to("admin/dashboard/banksoal/edit/" . $soalBuilder['bank_soal_id']);
+        $soalBuilder = $soalModel->find($id_soal);
+        // dd($data);
+        return redirect()->to("admin/dashboard/banksoal/" . $soalBuilder['bank_soal_id']);
     }
 }
